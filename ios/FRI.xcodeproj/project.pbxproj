@@ -1,0 +1,650 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		02F253832FFFDD9362CA4CB8 /* DataManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502EECBEB4451E2323EA233 /* DataManagementView.swift */; };
+		03D1671ADF31234857B76436 /* Montserrat-OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 69372742AB7DA8E138931445 /* Montserrat-OFL.txt */; };
+		0E96A1FC0620CAB594E9E290 /* Reflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215AEA862DB106BC1473CBA5 /* Reflection.swift */; };
+		2B2768C56B09280ECCF3F17B /* FRIUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E2D1C6AB0E7ACB96A56AA2 /* FRIUITests.swift */; };
+		38F30A0F4B256CD14C237DA2 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DA342CE1DB1592641A2C1B /* JournalView.swift */; };
+		45689FD2AF362DCED248B529 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 314D8DD4F2BC6BB9604DCD05 /* PrivacyInfo.xcprivacy */; };
+		4C435BF42A6D6E3F7013B869 /* JourneyArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFD324C5367A1A51ED2C778 /* JourneyArchive.swift */; };
+		4F04757350C58E416C714E05 /* DayHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 319E8EAD19B4E046CDD9F1A4 /* DayHistoryView.swift */; };
+		516011EA0F94359379A4A27F /* OnboardingDraft.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC10B3FB4E1058E32EAF35CC /* OnboardingDraft.swift */; };
+		516F872E9B6957E3C26D7A9A /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 39D581E65B8A21F3EDA7CF7B /* Inter.ttf */; };
+		57270ACCC9DC70D663E426CF /* Inter-OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = C712CCF7D6CEC9FF02234E48 /* Inter-OFL.txt */; };
+		596BF21098498F9460F83033 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEA8A35498A950CDC609541 /* AppStore.swift */; };
+		6382B0D15E86005F2E5B234B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 227021D954F6BF79705224BC /* Assets.xcassets */; };
+		67FBDA17D283081F92A4ED31 /* Journey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC8EE5054312F4E4D1E730C /* Journey.swift */; };
+		7850D830FE9E9E1CECC864D7 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642E2E0087E48FE5691C43B /* OnboardingView.swift */; };
+		857839E2ACB694EE825A2C8C /* Journey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC8EE5054312F4E4D1E730C /* Journey.swift */; };
+		87D85FF29FC6DCB9401A0206 /* Reflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215AEA862DB106BC1473CBA5 /* Reflection.swift */; };
+		88A8D21921853316242161D1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0326FB8FCD348DB8BFFB6521 /* MainView.swift */; };
+		906E6081C53C16285F2A3C94 /* FocusedCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9AAFFEF165EC0A3178702D5 /* FocusedCore.swift */; };
+		AD6339E7A1DA484E0458CA32 /* CheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BDFBA98E6E79A4A62E68CB /* CheckInView.swift */; };
+		BBB1E186F4F1E220A02A00B1 /* SupportViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A593ACB2B9FC685BC0439A /* SupportViews.swift */; };
+		BFA2B568E02AB21BE8B135F6 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07EFD90AA81D2C3D60307F7E /* Montserrat-ExtraBold.ttf */; };
+		CBDADC3F34D96305D22ABDD8 /* JourneyArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFD324C5367A1A51ED2C778 /* JourneyArchive.swift */; };
+		D08E49370EE04720FAB8DA24 /* FRIWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4EC86C4BA54DB87231F28D /* FRIWidgets.swift */; };
+		D644B5298E517AC9CBCA8BD6 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2DD0D4224DC82D5C7208832 /* DesignSystem.swift */; };
+		DAB4AC50BE42292775C602F4 /* PlanEditorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70A4CC6D656EB21B384BDFA5 /* PlanEditorView.swift */; };
+		E76726A56353A0B4C7500ECF /* FRIWidgets.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3F8201DBB5DDE067B81CC7A9 /* FRIWidgets.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		EA8DADF6734AB20F135E8DC6 /* ReminderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC8335CA52A1EDD9C78089C4 /* ReminderView.swift */; };
+		F2B260717778172C4A146932 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 06DEE8F1114492C2F0E3C923 /* SettingsView.swift */; };
+		F5C38880516EF93A96E69182 /* FocusedCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9AAFFEF165EC0A3178702D5 /* FocusedCore.swift */; };
+		FE2965DE424A5ECBA4DBB991 /* AppearancePreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5F292AF9E6E5EA23784544 /* AppearancePreference.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		2FADED4607036A54F031C091 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C5CB54E05BCF8B7088FAEEE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = F9487DF8F91DDF855858725F;
+			remoteInfo = FRI;
+		};
+		F04BEB965F1A053AAB4FA89F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5C5CB54E05BCF8B7088FAEEE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C3F9B36BA15A59C11599822A;
+			remoteInfo = FRIWidgets;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		F9EC647BCD9893F3F6AAC48E /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				E76726A56353A0B4C7500ECF /* FRIWidgets.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		0326FB8FCD348DB8BFFB6521 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		06DEE8F1114492C2F0E3C923 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		07EFD90AA81D2C3D60307F7E /* Montserrat-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-ExtraBold.ttf"; sourceTree = "<group>"; };
+		1F4EC86C4BA54DB87231F28D /* FRIWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRIWidgets.swift; sourceTree = "<group>"; };
+		215AEA862DB106BC1473CBA5 /* Reflection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reflection.swift; sourceTree = "<group>"; };
+		227021D954F6BF79705224BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		2C5F292AF9E6E5EA23784544 /* AppearancePreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreference.swift; sourceTree = "<group>"; };
+		314D8DD4F2BC6BB9604DCD05 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		319E8EAD19B4E046CDD9F1A4 /* DayHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayHistoryView.swift; sourceTree = "<group>"; };
+		38E2D1C6AB0E7ACB96A56AA2 /* FRIUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRIUITests.swift; sourceTree = "<group>"; };
+		39D581E65B8A21F3EDA7CF7B /* Inter.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Inter.ttf; sourceTree = "<group>"; };
+		3F8201DBB5DDE067B81CC7A9 /* FRIWidgets.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = FRIWidgets.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		51DA342CE1DB1592641A2C1B /* JournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JournalView.swift; sourceTree = "<group>"; };
+		6502EECBEB4451E2323EA233 /* DataManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManagementView.swift; sourceTree = "<group>"; };
+		678112C7D3ABDA07024B2ACC /* FRI.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = FRI.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		69372742AB7DA8E138931445 /* Montserrat-OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Montserrat-OFL.txt"; sourceTree = "<group>"; };
+		70A4CC6D656EB21B384BDFA5 /* PlanEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanEditorView.swift; sourceTree = "<group>"; };
+		AAC8EE5054312F4E4D1E730C /* Journey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Journey.swift; sourceTree = "<group>"; };
+		AC10B3FB4E1058E32EAF35CC /* OnboardingDraft.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDraft.swift; sourceTree = "<group>"; };
+		B7270D01D27F7295B0E9EA34 /* FRIUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FRIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		BEFD324C5367A1A51ED2C778 /* JourneyArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyArchive.swift; sourceTree = "<group>"; };
+		C2DD0D4224DC82D5C7208832 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		C642E2E0087E48FE5691C43B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		C712CCF7D6CEC9FF02234E48 /* Inter-OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Inter-OFL.txt"; sourceTree = "<group>"; };
+		CBEA8A35498A950CDC609541 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
+		D8A593ACB2B9FC685BC0439A /* SupportViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportViews.swift; sourceTree = "<group>"; };
+		D9AAFFEF165EC0A3178702D5 /* FocusedCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusedCore.swift; sourceTree = "<group>"; };
+		DC8335CA52A1EDD9C78089C4 /* ReminderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderView.swift; sourceTree = "<group>"; };
+		E9BDFBA98E6E79A4A62E68CB /* CheckInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		0E468D7385FE981FB059CA0D = {
+			isa = PBXGroup;
+			children = (
+				65E60B719B5CB16132AE01FC /* App */,
+				407A170F1B52EFA94E7AAD56 /* Shared */,
+				963768B74B218E19F4AA16DB /* UITests */,
+				322B05C1CAEC54C3ADA13169 /* Widgets */,
+				E06D857C67E5737566939D79 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		11009AF226C9CB0CE52CE966 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				C712CCF7D6CEC9FF02234E48 /* Inter-OFL.txt */,
+				39D581E65B8A21F3EDA7CF7B /* Inter.ttf */,
+				07EFD90AA81D2C3D60307F7E /* Montserrat-ExtraBold.ttf */,
+				69372742AB7DA8E138931445 /* Montserrat-OFL.txt */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		322B05C1CAEC54C3ADA13169 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				1F4EC86C4BA54DB87231F28D /* FRIWidgets.swift */,
+			);
+			path = Widgets;
+			sourceTree = "<group>";
+		};
+		407A170F1B52EFA94E7AAD56 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				D9AAFFEF165EC0A3178702D5 /* FocusedCore.swift */,
+				AAC8EE5054312F4E4D1E730C /* Journey.swift */,
+				BEFD324C5367A1A51ED2C778 /* JourneyArchive.swift */,
+				215AEA862DB106BC1473CBA5 /* Reflection.swift */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		65E60B719B5CB16132AE01FC /* App */ = {
+			isa = PBXGroup;
+			children = (
+				2C5F292AF9E6E5EA23784544 /* AppearancePreference.swift */,
+				CBEA8A35498A950CDC609541 /* AppStore.swift */,
+				227021D954F6BF79705224BC /* Assets.xcassets */,
+				E9BDFBA98E6E79A4A62E68CB /* CheckInView.swift */,
+				6502EECBEB4451E2323EA233 /* DataManagementView.swift */,
+				319E8EAD19B4E046CDD9F1A4 /* DayHistoryView.swift */,
+				C2DD0D4224DC82D5C7208832 /* DesignSystem.swift */,
+				51DA342CE1DB1592641A2C1B /* JournalView.swift */,
+				0326FB8FCD348DB8BFFB6521 /* MainView.swift */,
+				AC10B3FB4E1058E32EAF35CC /* OnboardingDraft.swift */,
+				C642E2E0087E48FE5691C43B /* OnboardingView.swift */,
+				70A4CC6D656EB21B384BDFA5 /* PlanEditorView.swift */,
+				314D8DD4F2BC6BB9604DCD05 /* PrivacyInfo.xcprivacy */,
+				DC8335CA52A1EDD9C78089C4 /* ReminderView.swift */,
+				06DEE8F1114492C2F0E3C923 /* SettingsView.swift */,
+				D8A593ACB2B9FC685BC0439A /* SupportViews.swift */,
+				11009AF226C9CB0CE52CE966 /* Fonts */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		963768B74B218E19F4AA16DB /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				38E2D1C6AB0E7ACB96A56AA2 /* FRIUITests.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
+		E06D857C67E5737566939D79 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				678112C7D3ABDA07024B2ACC /* FRI.app */,
+				B7270D01D27F7295B0E9EA34 /* FRIUITests.xctest */,
+				3F8201DBB5DDE067B81CC7A9 /* FRIWidgets.appex */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		2E8389AA6BC10897996FB538 /* FRIUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7AE2DB54B0CA39549F364760 /* Build configuration list for PBXNativeTarget "FRIUITests" */;
+			buildPhases = (
+				ABACB62729B0BA0D5834C44D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				47B9239254CEB9631034BE3F /* PBXTargetDependency */,
+			);
+			name = FRIUITests;
+			packageProductDependencies = (
+			);
+			productName = FRIUITests;
+			productReference = B7270D01D27F7295B0E9EA34 /* FRIUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		C3F9B36BA15A59C11599822A /* FRIWidgets */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 93EA36841B1360DFDB5677F9 /* Build configuration list for PBXNativeTarget "FRIWidgets" */;
+			buildPhases = (
+				51CCCEF862CDC79C716AC61D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = FRIWidgets;
+			packageProductDependencies = (
+			);
+			productName = FRIWidgets;
+			productReference = 3F8201DBB5DDE067B81CC7A9 /* FRIWidgets.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
+		F9487DF8F91DDF855858725F /* FRI */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DC7A742B4650DCA73E5FE6A4 /* Build configuration list for PBXNativeTarget "FRI" */;
+			buildPhases = (
+				7B52557D1B5E3168622FA099 /* Sources */,
+				08EB812931918D8419C4EBC7 /* Resources */,
+				F9EC647BCD9893F3F6AAC48E /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0F6A8A75BA22E7C11E84B01C /* PBXTargetDependency */,
+			);
+			name = FRI;
+			packageProductDependencies = (
+			);
+			productName = FRI;
+			productReference = 678112C7D3ABDA07024B2ACC /* FRI.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		5C5CB54E05BCF8B7088FAEEE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					2E8389AA6BC10897996FB538 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+						TestTargetID = F9487DF8F91DDF855858725F;
+					};
+					C3F9B36BA15A59C11599822A = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+					F9487DF8F91DDF855858725F = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 2DFF7D0D8305E52241BFECB6 /* Build configuration list for PBXProject "FRI" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 0E468D7385FE981FB059CA0D;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = E06D857C67E5737566939D79 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F9487DF8F91DDF855858725F /* FRI */,
+				C3F9B36BA15A59C11599822A /* FRIWidgets */,
+				2E8389AA6BC10897996FB538 /* FRIUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		08EB812931918D8419C4EBC7 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6382B0D15E86005F2E5B234B /* Assets.xcassets in Resources */,
+				57270ACCC9DC70D663E426CF /* Inter-OFL.txt in Resources */,
+				516F872E9B6957E3C26D7A9A /* Inter.ttf in Resources */,
+				BFA2B568E02AB21BE8B135F6 /* Montserrat-ExtraBold.ttf in Resources */,
+				03D1671ADF31234857B76436 /* Montserrat-OFL.txt in Resources */,
+				45689FD2AF362DCED248B529 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		51CCCEF862CDC79C716AC61D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D08E49370EE04720FAB8DA24 /* FRIWidgets.swift in Sources */,
+				906E6081C53C16285F2A3C94 /* FocusedCore.swift in Sources */,
+				67FBDA17D283081F92A4ED31 /* Journey.swift in Sources */,
+				CBDADC3F34D96305D22ABDD8 /* JourneyArchive.swift in Sources */,
+				0E96A1FC0620CAB594E9E290 /* Reflection.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7B52557D1B5E3168622FA099 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				596BF21098498F9460F83033 /* AppStore.swift in Sources */,
+				FE2965DE424A5ECBA4DBB991 /* AppearancePreference.swift in Sources */,
+				AD6339E7A1DA484E0458CA32 /* CheckInView.swift in Sources */,
+				02F253832FFFDD9362CA4CB8 /* DataManagementView.swift in Sources */,
+				4F04757350C58E416C714E05 /* DayHistoryView.swift in Sources */,
+				D644B5298E517AC9CBCA8BD6 /* DesignSystem.swift in Sources */,
+				F5C38880516EF93A96E69182 /* FocusedCore.swift in Sources */,
+				38F30A0F4B256CD14C237DA2 /* JournalView.swift in Sources */,
+				857839E2ACB694EE825A2C8C /* Journey.swift in Sources */,
+				4C435BF42A6D6E3F7013B869 /* JourneyArchive.swift in Sources */,
+				88A8D21921853316242161D1 /* MainView.swift in Sources */,
+				516011EA0F94359379A4A27F /* OnboardingDraft.swift in Sources */,
+				7850D830FE9E9E1CECC864D7 /* OnboardingView.swift in Sources */,
+				DAB4AC50BE42292775C602F4 /* PlanEditorView.swift in Sources */,
+				87D85FF29FC6DCB9401A0206 /* Reflection.swift in Sources */,
+				EA8DADF6734AB20F135E8DC6 /* ReminderView.swift in Sources */,
+				F2B260717778172C4A146932 /* SettingsView.swift in Sources */,
+				BBB1E186F4F1E220A02A00B1 /* SupportViews.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ABACB62729B0BA0D5834C44D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B2768C56B09280ECCF3F17B /* FRIUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		0F6A8A75BA22E7C11E84B01C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C3F9B36BA15A59C11599822A /* FRIWidgets */;
+			targetProxy = F04BEB965F1A053AAB4FA89F /* PBXContainerItemProxy */;
+		};
+		47B9239254CEB9631034BE3F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = F9487DF8F91DDF855858725F /* FRI */;
+			targetProxy = 2FADED4607036A54F031C091 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1A8AF5BCCCB78C72F00F2778 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Config/Widgets.entitlements;
+				INFOPLIST_FILE = "Config/Widget-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dk.fri.app.widgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3F1A4F923A0C2F491A5307FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 5;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		66A1731EB7E2883BBF61D1DC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = Config/Widgets.entitlements;
+				INFOPLIST_FILE = "Config/Widget-Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dk.fri.app.widgets;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		69F6159A980562028FC3287E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Config/FRI.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "Config/App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = FRI;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dk.fri.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		B239796DC06A3613E868AFDC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dk.fri.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FRI;
+			};
+			name = Debug;
+		};
+		B60693B74769F67D3E4E51FE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 5;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		B65A302B8D3A08316BE5E5AD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dk.fri.uitests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = FRI;
+			};
+			name = Release;
+		};
+		DC950652DA9DC1815AD46C68 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = Config/FRI.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				INFOPLIST_FILE = "Config/App-Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = FRI;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = dk.fri.app;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		2DFF7D0D8305E52241BFECB6 /* Build configuration list for PBXProject "FRI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B60693B74769F67D3E4E51FE /* Debug */,
+				3F1A4F923A0C2F491A5307FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7AE2DB54B0CA39549F364760 /* Build configuration list for PBXNativeTarget "FRIUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B239796DC06A3613E868AFDC /* Debug */,
+				B65A302B8D3A08316BE5E5AD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		93EA36841B1360DFDB5677F9 /* Build configuration list for PBXNativeTarget "FRIWidgets" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				66A1731EB7E2883BBF61D1DC /* Debug */,
+				1A8AF5BCCCB78C72F00F2778 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		DC7A742B4650DCA73E5FE6A4 /* Build configuration list for PBXNativeTarget "FRI" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DC950652DA9DC1815AD46C68 /* Debug */,
+				69F6159A980562028FC3287E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 5C5CB54E05BCF8B7088FAEEE /* Project object */;
+}
