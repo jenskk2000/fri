@@ -17,13 +17,15 @@ struct DailyCheckIn: Codable, Identifiable, Equatable {
         return String(format: "%04d-%02d-%02d", parts.year ?? 0, parts.month ?? 0, parts.day ?? 0)
     }
     private static func validDayKey(_ key: String) -> Bool {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "en_US_POSIX")
-        formatter.timeZone = TimeZone(secondsFromGMT: 0)
-        formatter.dateFormat = "yyyy-MM-dd"
-        formatter.isLenient = false
-        guard let date = formatter.date(from: key) else { return false }
-        return formatter.string(from: date) == key
+        let fields = key.split(separator: "-", omittingEmptySubsequences: false)
+        guard fields.count == 3, fields[0].count == 4, fields[1].count == 2, fields[2].count == 2,
+              key.utf8.allSatisfy({ $0 == 45 || (48...57).contains($0) }),
+              let year = Int(fields[0]), let month = Int(fields[1]), let day = Int(fields[2]) else { return false }
+        var calendar = Calendar(identifier: .gregorian)
+        calendar.timeZone = TimeZone(secondsFromGMT: 0)!
+        guard let date = calendar.date(from: DateComponents(year: year, month: month, day: day)) else { return false }
+        let parts = calendar.dateComponents([.year, .month, .day], from: date)
+        return parts.year == year && parts.month == month && parts.day == day
     }
 }
 
@@ -55,9 +57,16 @@ extension Journey {
         checkIns = entries
         return true
     }
+    @discardableResult mutating func removeCheckIn(id: UUID) -> Bool {
+        var entries = reflections
+        guard let index = entries.firstIndex(where: { $0.id == id }) else { return false }
+        entries.remove(at: index)
+        checkIns = entries
+        return true
+    }
     func longestStreakDays(at now: Date) -> Int {
         guard now > quitDate else { return 0 }
-        let boundaries = [quitDate] + lapses.filter { $0.date >= quitDate && $0.date <= now }.map(\.date).sorted() + [now]
+        let boundaries = [quitDate] + countedLapses(at: now).map(\.date).sorted() + [now]
         return zip(boundaries, boundaries.dropFirst()).map { Int(max(0, $1.timeIntervalSince($0)) / 86400) }.max() ?? 0
     }
     /// An explicit date correction recalculates the estimate, retaining every later price segment.
@@ -65,6 +74,7 @@ extension Journey {
         guard date.timeIntervalSince1970.isFinite,
               date >= Date(timeIntervalSince1970: 0),
               !lapses.contains(where: { $0.date < date }) else { return false }
+        if date == quitDate { return true }
         let rate = consumption(at: date)
         let later = baselines.filter { $0.effectiveFrom > date }
         quitDate = date

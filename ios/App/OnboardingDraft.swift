@@ -11,7 +11,7 @@ struct OnboardingDraft: Codable, Equatable {
     var quitDate: Date
     var firstAction: String? = nil
     var isValid: Bool {
-        (firstAction?.count ?? 0) <= 250 && (0...5).contains(step) && (0...2).contains(startMode) && daily.count <= 12 && tin.count <= 12 && price.count <= 16
+        (firstAction?.count ?? 0) <= Journey.Limits.generalAction && (0...5).contains(step) && (0...2).contains(startMode) && daily.count <= 12 && tin.count <= 12 && price.count <= 16
         && quitDate.timeIntervalSince1970.isFinite && quitDate > Date(timeIntervalSince1970: 0)
     }
 }

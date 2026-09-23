@@ -67,12 +67,12 @@ struct CravingView: View {
                 }
             }
         }.onChange(of: trigger) { _, value in
-            if endDate != nil { _ = store.edit { $0.pauseTrigger = value } }
+            if endDate != nil { _ = store.updateActivePauseTrigger(value) }
         }
     }
     private func startPause() {
         let end = Date().addingTimeInterval(duration)
-        if store.edit({ $0.pauseEndsAt = end; $0.pauseSessionID = sessionID; $0.pauseTrigger = trigger }) { endDate = end }
+        if store.startPause(id: sessionID, until: end, trigger: trigger) { endDate = end }
     }
 }
 
@@ -94,11 +94,11 @@ struct WinFeedbackView: View {
                         TextField("Situation (valgfrit)", text: $trigger).padding(16).background(Ink.surface, in: RoundedRectangle(cornerRadius: 12)).accessibilityIdentifier("winTrigger")
                         TextField("Det, der hjalp (valgfrit)", text: $action, axis: .vertical).lineLimit(2...5).padding(16).background(Ink.surface, in: RoundedRectangle(cornerRadius: 12)).accessibilityIdentifier("winAction")
                         if let suggestion {
-                            Button("Min valgte handling hjalp") { action = String(suggestion.prefix(250)) }.font(Ink.body(.subheadline)).frame(minHeight: 44)
+                            Button("Min valgte handling hjalp") { action = String(suggestion.prefix(Journey.Limits.personalAction)) }.font(Ink.body(.subheadline)).frame(minHeight: 44)
                         }
-                        Text("Situation: højst 100 tegn. Handling: højst 250 tegn.").font(Ink.body(.caption)).foregroundStyle(Ink.muted)
+                        Text("Situation: højst \(Journey.Limits.triggerText) tegn. Handling: højst \(Journey.Limits.personalAction) tegn.").font(Ink.body(.caption)).foregroundStyle(Ink.muted)
                         PrimaryButton(title: "Gem og luk", symbol: "checkmark") { save() }
-                            .disabled(trigger.count > 100 || action.count > 250).accessibilityIdentifier("saveWinFeedback")
+                            .disabled(trigger.count > Journey.Limits.triggerText || action.count > Journey.Limits.personalAction).accessibilityIdentifier("saveWinFeedback")
                         QuietButton(title: justCompleted ? "Spring over" : "Annuller") { dismiss() }.accessibilityIdentifier("skipWinFeedback")
                     }.padding(26)
                 }.scrollDismissesKeyboard(.interactively)
@@ -106,10 +106,9 @@ struct WinFeedbackView: View {
         }.onAppear { trigger = existing.trigger ?? ""; action = existing.action ?? "" }
     }
     private func save() {
-        guard var next = store.journey, let index = next.wins.firstIndex(where: { $0.id == existing.id }) else { return }
-        next.wins[index].trigger = trigger.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
-        next.wins[index].action = action.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
-        if store.commit(next) { dismiss() }
+        let cleanedTrigger = trigger.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        let cleanedAction = action.trimmingCharacters(in: .whitespacesAndNewlines).nilIfEmpty
+        if store.updateWin(id: existing.id, trigger: cleanedTrigger, action: cleanedAction) { dismiss() }
     }
 }
 
@@ -151,8 +150,8 @@ struct LapseView: View {
                         PrimaryButton(title: existing == nil ? "Notér og fortsæt" : "Gem rettelse", symbol: "checkmark") {
                             guard !saving else { return }; saving = true
                             let success: Bool
-                            if let existing, var next = store.journey {
-                                success = next.updateLapse(id: existing.id, count: count, trigger: reason, at: date, now: Date()) && store.commit(next)
+                            if let existing {
+                                success = store.updateLapse(id: existing.id, count: count, trigger: reason, at: date)
                             } else { success = store.addLapse(count: count, trigger: reason, at: date) }
                             if success { dismiss() } else { saving = false }
                         }.disabled(saving).accessibilityIdentifier("confirmLapse")

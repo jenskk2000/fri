@@ -82,57 +82,86 @@ struct HomeView: View {
     @Environment(\.dynamicTypeSize) private var typeSize
     var body: some View {
         GeometryReader { proxy in
-            TimelineView(.periodic(from: .now, by: 1)) { context in
-                if let journey = store.journey {
-                    let now = context.date
-                    let planned = journey.quitDate > now
-                    ScrollView {
-                        VStack(alignment: .leading, spacing: 0) {
-                            Spacer(minLength: typeSize.isAccessibilitySize ? 24 : max(70, proxy.size.height * 0.17))
-                            VStack(alignment: .leading, spacing: 11) {
-                                Text("DIN FRIHED, DAG FOR DAG").font(Ink.body(.caption, weight: .semibold)).tracking(2)
-                                (Text(planned ? "Din nye" : journey.motivation.homeTitle) + Text("\n" + (planned ? "begyndelse." : journey.motivation.homeAccent)).foregroundColor(Ink.mint))
-                                    .scaledTitle(43).tracking(-1.5).fixedSize(horizontal: false, vertical: true)
-                            }.padding(.bottom, 25)
-                            Button { sheet = .savings } label: {
-                                VStack(alignment: .leading, spacing: 8) {
-                                    Eyebrow(text: "Anslået sparet")
-                                    HStack(alignment: .firstTextBaseline, spacing: 7) {
-                                        Text(Danish.money(journey.savingsKr(at: now), decimals: 2)).font(Ink.title(57)).tracking(-2).monospacedDigit()
-                                        Text("kr.").font(Ink.title(27))
-                                    }.lineLimit(1).minimumScaleFactor(0.35)
-                                    Text("\(Danish.money(journey.consumption(at: now).dailyCostOre / 100)) kr. pr. døgn ud fra dit tidligere forbrug.")
-                                        .font(Ink.body(.subheadline)).foregroundStyle(Ink.muted)
-                                }.frame(maxWidth: .infinity, alignment: .leading).contentShape(Rectangle())
-                            }.buttonStyle(.plain).accessibilityIdentifier("savingsCounter")
-                                .accessibilityLabel("Anslået sparet \(Danish.money(journey.savingsKr(at: now), decimals: 2)) kroner. Se beregning.")
-                            HStack(spacing: 9) {
-                                Image(systemName: "calendar").foregroundStyle(Ink.mint)
-                                Text(streakLabel(journey, at: now)).font(Ink.body(.subheadline, weight: .medium))
-                            }.padding(.horizontal, 16).padding(.vertical, 12)
-                                .overlay(Capsule().strokeBorder(Ink.text.opacity(0.4))).padding(.top, 19)
-                                .accessibilityElement(children: .combine)
-                            Text(planned ? "Du bestemmer tempoet." : "Siden sidste registrerede pose")
-                                .font(Ink.body(.caption)).foregroundStyle(Ink.muted).padding(.top, 8)
-                            if journey.motivation == .money {
-                                Text("Dit mål: \(journey.goalName) · \(Danish.money(Double(journey.goalOre) / 100)) kr.")
-                                    .font(Ink.body(.subheadline)).padding(.top, 12)
-                            }
-                            Spacer(minLength: 24)
-                            VStack(spacing: 3) {
-                                PrimaryButton(title: journey.pauseEndsAt == nil ? "Jeg har lyst lige nu" : "Fortsæt min pause") { sheet = .craving }.accessibilityIdentifier("cravingHelp")
-                                if !planned { QuietButton(title: "Jeg tog en pose") { sheet = .lapse }.accessibilityIdentifier("logLapse") }
-                                else { QuietButton(title: "Se min forberedelse") { sheet = .craving } }
-                            }
-                        }.padding(.horizontal, 26).padding(.bottom, 6).frame(minHeight: proxy.size.height, alignment: .bottomLeading)
-                    }.scrollIndicators(.hidden)
+            if let journey = store.journey {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 0) {
+                        Spacer(minLength: typeSize.isAccessibilitySize ? 24 : max(70, proxy.size.height * 0.17))
+                        HomeLiveContent(journey: journey, sheet: $sheet)
+                        Spacer(minLength: 24)
+                        HomeActions(journey: journey, sheet: $sheet)
+                    }.padding(.horizontal, 26).padding(.bottom, 6).frame(minHeight: proxy.size.height, alignment: .bottomLeading)
+                }.scrollIndicators(.hidden)
+            }
+        }
+    }
+}
+
+private struct HomeLiveContent: View {
+    let journey: Journey
+    @Binding var sheet: SheetRoute?
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 1)) { context in
+            let snapshot = HomeDisplaySnapshot(journey: journey, now: context.date)
+            VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: 11) {
+                    Text("DIN FRIHED, DAG FOR DAG").font(Ink.body(.caption, weight: .semibold)).tracking(2)
+                    (Text(snapshot.planned ? "Din nye" : journey.motivation.homeTitle) + Text("\n" + (snapshot.planned ? "begyndelse." : journey.motivation.homeAccent)).foregroundColor(Ink.mint))
+                        .scaledTitle(43).tracking(-1.5).fixedSize(horizontal: false, vertical: true)
+                }.padding(.bottom, 25)
+                Button { sheet = .savings } label: {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Eyebrow(text: "Anslået sparet")
+                        HStack(alignment: .firstTextBaseline, spacing: 7) {
+                            Text(snapshot.saved).font(Ink.title(57)).tracking(-2).monospacedDigit()
+                            Text("kr.").font(Ink.title(27))
+                        }.lineLimit(1).minimumScaleFactor(0.35)
+                        Text("\(snapshot.dailyCost) kr. pr. døgn ud fra dit tidligere forbrug.")
+                            .font(Ink.body(.subheadline)).foregroundStyle(Ink.muted)
+                    }.frame(maxWidth: .infinity, alignment: .leading).contentShape(Rectangle())
+                }.buttonStyle(.plain).accessibilityIdentifier("savingsCounter")
+                    .accessibilityLabel("Anslået sparet \(snapshot.saved) kroner. Se beregning.")
+                HStack(spacing: 9) {
+                    Image(systemName: "calendar").foregroundStyle(Ink.mint)
+                    Text(snapshot.streak).font(Ink.body(.subheadline, weight: .medium))
+                }.padding(.horizontal, 16).padding(.vertical, 12)
+                    .overlay(Capsule().strokeBorder(Ink.text.opacity(0.4))).padding(.top, 19)
+                    .accessibilityElement(children: .combine)
+                Text(snapshot.planned ? "Du bestemmer tempoet." : "Siden sidste registrerede pose")
+                    .font(Ink.body(.caption)).foregroundStyle(Ink.muted).padding(.top, 8)
+                if journey.motivation == .money {
+                    Text("Dit mål: \(journey.goalName) · \(Danish.money(Double(journey.goalOre) / 100)) kr.")
+                        .font(Ink.body(.subheadline)).padding(.top, 12)
                 }
             }
         }
     }
-    private func streakLabel(_ journey: Journey, at now: Date) -> String {
-        if journey.quitDate > now { return "Din start: \(Danish.date(journey.quitDate))" }
-        return Danish.duration(from: journey.streakStart(at: now), to: now)
+}
+
+private struct HomeActions: View {
+    let journey: Journey
+    @Binding var sheet: SheetRoute?
+    var body: some View {
+        TimelineView(.periodic(from: .now, by: 1)) { context in
+            let planned = journey.quitDate > context.date
+            VStack(spacing: 3) {
+                PrimaryButton(title: journey.pauseEndsAt == nil ? "Jeg har lyst lige nu" : "Fortsæt min pause") { sheet = .craving }.accessibilityIdentifier("cravingHelp")
+                if !planned { QuietButton(title: "Jeg tog en pose") { sheet = .lapse }.accessibilityIdentifier("logLapse") }
+                else { QuietButton(title: "Se min forberedelse") { sheet = .craving } }
+            }
+        }
+    }
+}
+
+private struct HomeDisplaySnapshot {
+    let planned: Bool
+    let saved: String
+    let dailyCost: String
+    let streak: String
+    init(journey: Journey, now: Date) {
+        planned = journey.quitDate > now
+        saved = Danish.money(journey.savingsKr(at: now), decimals: 2)
+        dailyCost = Danish.money(journey.consumption(at: now).dailyCostOre / 100)
+        streak = planned ? "Din start: \(Danish.date(journey.quitDate))" : Danish.duration(from: journey.streakStart(at: now), to: now)
     }
 }
 
@@ -188,6 +217,9 @@ struct ProgressScreen: View {
             ScrollView {
                 if let j = store.journey {
                     let now = context.date
+                    let savingsKr = j.savingsKr(at: now)
+                    let preciseSavings = Danish.money(savingsKr, decimals: 2)
+                    let roundedSavings = Danish.money(savingsKr)
                     VStack(alignment: .leading, spacing: 24) {
                         PageHeading(eyebrow: "Dit overblik", title: "Det går fremad.", subtitle: "Din start: \(Danish.fullDate(j.quitDate)).")
                         NotePanel {
@@ -197,7 +229,7 @@ struct ProgressScreen: View {
                         }
                         Button { sheet = .savings } label: {
                             VStack(alignment: .leading, spacing: 6) {
-                                Text("\(Danish.money(j.savingsKr(at: now), decimals: 2)) kr.").font(Ink.title(42)).lineLimit(1).minimumScaleFactor(0.4)
+                                Text("\(preciseSavings) kr.").font(Ink.title(42)).lineLimit(1).minimumScaleFactor(0.4)
                                 Text("Anslået sparet · se beregning").font(Ink.body(.subheadline)).foregroundStyle(Ink.muted)
                             }.frame(maxWidth: .infinity, alignment: .leading)
                         }.buttonStyle(.plain)
@@ -215,8 +247,8 @@ struct ProgressScreen: View {
                         NotePanel {
                             Eyebrow(text: "Dit opsparingsmål")
                             Text(j.goalName).font(Ink.body(.title3, weight: .semibold))
-                            ProgressView(value: min(1, j.savingsKr(at: now) * 100 / Double(j.goalOre))).tint(Ink.mint)
-                            Text("\(Danish.money(j.savingsKr(at: now))) af \(Danish.money(Double(j.goalOre) / 100)) kr.").font(Ink.body(.subheadline))
+                            ProgressView(value: min(1, savingsKr * 100 / Double(j.goalOre))).tint(Ink.mint)
+                            Text("\(roundedSavings) af \(Danish.money(Double(j.goalOre) / 100)) kr.").font(Ink.body(.subheadline))
                             Button("Ret mit mål") { sheet = .settings }.font(Ink.body(.subheadline)).frame(minHeight: 44)
                         }
                         Text("\(j.wins.count) \(j.wins.count == 1 ? "pause" : "pauser") registreret. Din tidligere indsats bliver hos dig.").font(Ink.body(.subheadline)).foregroundStyle(Ink.muted)

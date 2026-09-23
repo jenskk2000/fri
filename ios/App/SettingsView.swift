@@ -31,15 +31,10 @@ struct SettingsView: View {
                         }
                         PrimaryButton(title: "Gem ændringer", symbol: "checkmark") {
                             guard let c = input.value, let goal = goalOre else { return }
-                            let success = store.edit {
-                                if $0.consumption(at: Date()) != c { $0.updateConsumption(c, at: Date()) }
-                                $0.goalOre = goal
-                                $0.goalName = String(goalName.trimmingCharacters(in: .whitespacesAndNewlines).prefix(80))
-                            }
-                            if success { store.notice = "Din plan er opdateret."; dismiss() }
+                            if store.saveSettings(consumption: c, goalOre: goal, goalName: goalName) { dismiss() }
                         }.disabled(input.value == nil || goalOre == nil || goalName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty).accessibilityIdentifier("saveSettings")
                         Divider()
-                        Toggle("Diskret widget", isOn: Binding(get: { store.journey?.discreetWidget ?? false }, set: { value in _ = store.edit { $0.discreetWidget = value } }))
+                        Toggle("Diskret widget", isOn: Binding(get: { store.journey?.discreetWidget ?? false }, set: { value in _ = store.setDiscreetWidget(value) }))
                             .font(Ink.body(.headline)).tint(Ink.mint).accessibilityIdentifier("discreetWidget")
                         Text("Vis kun kroner på låseskærmen. Ordet snus og din stime skjules.").font(Ink.body(.footnote)).foregroundStyle(Ink.muted)
                         Button { subSheet = .editPlan } label: { Label("Ret min stopdato og plan", systemImage: "pencil").font(Ink.body(.headline)).frame(minHeight: 44) }.accessibilityIdentifier("editPlan")

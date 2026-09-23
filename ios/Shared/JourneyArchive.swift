@@ -17,7 +17,8 @@ struct JourneyArchive {
     }
     static func decode(_ data: Data) throws -> Journey {
         guard data.count <= maximumImportBytes else { throw CocoaError(.fileReadTooLarge) }
-        let journey = try JSONDecoder().decode(Journey.self, from: data)
+        var journey = try JSONDecoder().decode(Journey.self, from: data)
+        journey.normalizeLegacyPlan()
         guard journey.isValid else { throw CocoaError(.fileReadCorruptFile) }
         return journey
     }

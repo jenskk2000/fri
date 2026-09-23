@@ -1,0 +1,218 @@
+{
+  "batch1": {
+    "schema": "xcodebuildmcp.output.test-result",
+    "schemaVersion": "3",
+    "didError": false,
+    "error": null,
+    "data": {
+      "summary": {
+        "status": "SUCCEEDED",
+        "durationMs": 193573,
+        "counts": {
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        "target": "simulator"
+      },
+      "artifacts": {
+        "buildLogPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/logs/test_sim_2026-09-22T19-15-43-962Z_pid13593_7ec3f9ed.log",
+        "xcresultPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/result-bundles/test_sim_2026-09-22T19-15-43-962Z_pid13593_7ef59382.xcresult",
+        "testProductsPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/test-products/test_sim_2026-09-22T19-15-43-962Z_pid13593_d7f1391a.xctestproducts"
+      },
+      "diagnostics": {
+        "warnings": [],
+        "errors": [],
+        "testFailures": []
+      },
+      "testCases": [
+        {
+          "suite": "FRIUITests",
+          "test": "testLocalBackupRestoresAndDismissesStaleEditors",
+          "status": "passed",
+          "durationMs": 31575
+        },
+        {
+          "suite": "FRIUITests",
+          "test": "testLongGeneralActionRemainsEditableAfterRelaunch",
+          "status": "passed",
+          "durationMs": 52605
+        },
+        {
+          "suite": "FRIUITests",
+          "test": "testPlanEditingPersistsAcrossLaunch",
+          "status": "passed",
+          "durationMs": 56161
+        },
+        {
+          "suite": "FRIUITests",
+          "test": "testSettingsKeepHistoryAndDanishDecimals",
+          "status": "passed",
+          "durationMs": 28570
+        }
+      ]
+    }
+  },
+  "batch2": {
+    "schema": "xcodebuildmcp.output.test-result",
+    "schemaVersion": "3",
+    "didError": false,
+    "error": null,
+    "data": {
+      "summary": {
+        "status": "SUCCEEDED",
+        "durationMs": 149239,
+        "counts": {
+          "passed": 4,
+          "failed": 0,
+          "skipped": 0
+        },
+        "target": "simulator"
+      },
+      "artifacts": {
+        "buildLogPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/logs/test_sim_2026-09-22T19-19-11-885Z_pid13593_3209676c.log",
+        "xcresultPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/result-bundles/test_sim_2026-09-22T19-19-11-886Z_pid13593_7c41553b.xcresult",
+        "testProductsPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/test-products/test_sim_2026-09-22T19-19-11-886Z_pid13593_64d67459.xctestproducts"
+      },
+      "diagnostics": {
+        "warnings": [],
+        "errors": [],
+        "testFailures": []
+      },
+      "testCases": [
+        {
+          "suite": "FRIUITests",
+          "test": "testConfirmedDaySurvivesRelaunchAndCanBeUndone",
+          "status": "passed",
+          "durationMs": 27682
+        },
+        {
+          "suite": "FRIUITests",
+          "test": "testPauseResumesAfterClosingApp",
+          "status": "passed",
+          "durationMs": 23395
+        },
+        {
+          "suite": "FRIUITests",
+          "test": "testPersonalSituationAndSuccessfulPauseFeedbackPersist",
+          "status": "passed",
+          "durationMs": 63840
+        },
+        {
+          "suite": "FRIUITests",
+          "test": "testRecordedPouchCanBeCorrectedWithoutDuplicate",
+          "status": "passed",
+          "durationMs": 18528
+        }
+      ]
+    }
+  },
+  "batch3": {
+    "schema": "xcodebuildmcp.output.test-result",
+    "schemaVersion": "3",
+    "didError": true,
+    "error": "Tests failed",
+    "data": {
+      "summary": {
+        "status": "FAILED",
+        "durationMs": 129136,
+        "counts": {
+          "passed": 3,
+          "failed": 1,
+          "skipped": 0
+        },
+        "target": "simulator"
+      },
+      "artifacts": {
+        "buildLogPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/logs/test_sim_2026-09-22T19-21-45-939Z_pid13593_f6b4c2a8.log",
+        "xcresultPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/result-bundles/test_sim_2026-09-22T19-21-45-940Z_pid13593_94a34184.xcresult",
+        "testProductsPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/test-products/test_sim_2026-09-22T19-21-45-940Z_pid13593_261573f5.xctestproducts"
+      },
+      "diagnostics": {
+        "warnings": [],
+        "errors": [],
+        "testFailures": [
+          {
+            "suite": "FRIUITests",
+            "test": "testOnboardingDraftResumesAfterTermination",
+            "message": "Failed to tap \"dailyPouches\" TextField: No matches found for Descendants matching type TextField from input {(",
+            "location": "/Users/jenskristian/Projects/snus/ios/UITests/FRIUITests.swift:80"
+          },
+          {
+            "suite": "FRIUITests",
+            "test": "testOnboardingDraftResumesAfterTermination()",
+            "message": "Failed to tap \"dailyPouches\" TextField: No matches found for Descendants matching type TextField from input {(\n    Application, pid: 22252, label: 'FRI'\n)}"
+          }
+        ]
+      },
+      "testCases": [
+        {
+          "suite": "FRIUITests",
+          "test": "testLapseUndoAndCravingJourney",
+          "status": "passed",
+          "durationMs": 23240
+        },
+        {
+          "suite": "FRIUITests",
+          "test": "testLargeTypeCoreFlowsRemainUsable",
+          "status": "passed",
+          "durationMs": 48009
+        },
+        {
+          "suite": "FRIUITests",
+          "test": "testOnboardingDraftResumesAfterTermination",
+          "status": "failed",
+          "durationMs": 11714
+        },
+        {
+          "suite": "FRIUITests",
+          "test": "testOnboardingValidationAndPersistence",
+          "status": "passed",
+          "durationMs": 35569
+        }
+      ]
+    }
+  },
+  "retry": {
+    "schema": "xcodebuildmcp.output.test-result",
+    "schemaVersion": "3",
+    "didError": false,
+    "error": null,
+    "data": {
+      "summary": {
+        "status": "SUCCEEDED",
+        "durationMs": 88961,
+        "counts": {
+          "passed": 2,
+          "failed": 0,
+          "skipped": 0
+        },
+        "target": "simulator"
+      },
+      "artifacts": {
+        "buildLogPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/logs/test_sim_2026-09-22T19-24-49-896Z_pid13593_e830b81d.log",
+        "xcresultPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/result-bundles/test_sim_2026-09-22T19-24-49-896Z_pid13593_c087649b.xcresult",
+        "testProductsPath": "~/Library/Developer/XcodeBuildMCP/workspaces/snus-3ee8d5708a58/test-products/test_sim_2026-09-22T19-24-49-896Z_pid13593_aa22830d.xctestproducts"
+      },
+      "diagnostics": {
+        "warnings": [],
+        "errors": [],
+        "testFailures": []
+      },
+      "testCases": [
+        {
+          "suite": "FRIUITests",
+          "test": "testLargeTypeCoreFlowsRemainUsable",
+          "status": "passed",
+          "durationMs": 50055
+        },
+        {
+          "suite": "FRIUITests",
+          "test": "testOnboardingDraftResumesAfterTermination",
+          "status": "passed",
+          "durationMs": 22498
+        }
+      ]
+    }
+  }
+}

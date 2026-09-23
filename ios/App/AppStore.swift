@@ -38,11 +38,12 @@ final class AppStore {
 
     @discardableResult func commit(_ value: Journey) -> Bool {
         guard !loadFailed else { return false }
+        let shouldReloadWidgets = journey.map { widgetContentChanged(from: $0, to: value) } ?? true
         do {
             try archive.save(value)
             try? clearDraft()
             journey = value
-            WidgetCenter.shared.reloadAllTimelines()
+            if shouldReloadWidgets { WidgetCenter.shared.reloadAllTimelines() }
             return true
         } catch {
             self.error = "Ændringen kunne ikke gemmes. Dine tidligere data er bevaret. Prøv igen."
@@ -71,12 +72,56 @@ final class AppStore {
         return false
     }
     func undoLapse(_ id: UUID) {
-        if edit({ $0.lapses.removeAll { $0.id == id } }) { notice = "Registreringen er fortrudt." }
+        guard var next = journey, next.removeLapse(id: id) else { return }
+        if commit(next) { notice = "Registreringen er fortrudt." }
     }
     @discardableResult func addWin(id: UUID, trigger: String?, action: String?) -> Bool {
         guard var next = journey, next.finishPause(id: id, at: Date(), trigger: trigger, action: action) else { return false }
         if commit(next) { notice = "Du kom videre. Din pause er gemt."; return true }
         return false
+    }
+    @discardableResult func startPause(id: UUID, until: Date, trigger: Trigger?) -> Bool {
+        guard var next = journey, next.startPause(id: id, until: until, trigger: trigger) else { return false }
+        return commit(next)
+    }
+    @discardableResult func updateActivePauseTrigger(_ trigger: Trigger?) -> Bool {
+        guard var next = journey, next.updatePauseTrigger(trigger) else { return false }
+        return commit(next)
+    }
+    @discardableResult func updateWin(id: UUID, trigger: String?, action: String?) -> Bool {
+        guard var next = journey, next.updateWin(id: id, trigger: trigger, action: action) else { return false }
+        return commit(next)
+    }
+    @discardableResult func updateLapse(id: UUID, count: Int, trigger: String, at date: Date) -> Bool {
+        guard var next = journey, next.updateLapse(id: id, count: count, trigger: trigger, at: date, now: Date()) else { return false }
+        return commit(next)
+    }
+    @discardableResult func deleteWin(_ id: UUID) -> Bool {
+        guard var next = journey, next.removeWin(id: id) else { return false }
+        return commit(next)
+    }
+    @discardableResult func deleteCheckIn(_ id: UUID) -> Bool {
+        guard var next = journey, next.removeCheckIn(id: id) else { return false }
+        return commit(next)
+    }
+    @discardableResult func savePlan(quitDate: Date, motivation: Motivation, triggers: [Trigger], copingAction: String, personalActions: [Trigger: String]) -> Bool {
+        guard var next = journey else { return false }
+        if quitDate != next.quitDate, !next.correctQuitDate(to: quitDate) { return false }
+        guard next.updatePlan(motivation: motivation, triggers: triggers, copingAction: copingAction, personalActions: personalActions) else { return false }
+        if commit(next) { notice = "Din plan er opdateret."; return true }
+        return false
+    }
+    @discardableResult func saveSettings(consumption: Consumption, goalOre: Int, goalName: String, at date: Date = Date()) -> Bool {
+        guard var next = journey else { return false }
+        if next.consumption(at: date) != consumption { next.updateConsumption(consumption, at: date) }
+        next.goalOre = goalOre
+        next.goalName = String(goalName.trimmingCharacters(in: .whitespacesAndNewlines).prefix(80))
+        guard next.isValid else { return false }
+        if commit(next) { notice = "Din plan er opdateret."; return true }
+        return false
+    }
+    @discardableResult func setDiscreetWidget(_ value: Bool) -> Bool {
+        edit { $0.discreetWidget = value }
     }
     @discardableResult func confirmDay(_ date: Date) -> Bool {
         guard var next = journey, next.confirmDay(date, at: Date()) else { return false }
@@ -97,6 +142,18 @@ final class AppStore {
             WidgetCenter.shared.reloadAllTimelines()
             return true
         } catch { self.error = "Kopien kunne ikke gendannes. Dine nuværende data er bevaret."; return false }
+    }
+
+    private func widgetContentChanged(from old: Journey, to new: Journey) -> Bool {
+        guard old.quitDate == new.quitDate, old.discreetWidget == new.discreetWidget,
+              old.baselines.count == new.baselines.count, old.lapses.count == new.lapses.count else { return true }
+        let sameBaselines = zip(old.baselines, new.baselines).allSatisfy {
+            $0.id == $1.id && $0.effectiveFrom == $1.effectiveFrom && $0.consumption == $1.consumption
+        }
+        let sameLapses = zip(old.lapses, new.lapses).allSatisfy {
+            $0.id == $1.id && $0.date == $1.date && $0.count == $1.count && $0.unitCostOre == $1.unitCostOre
+        }
+        return !sameBaselines || !sameLapses
     }
 
 }

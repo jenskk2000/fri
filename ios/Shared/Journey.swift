@@ -63,6 +63,11 @@ struct CravingWin: Codable, Identifiable {
 }
 
 struct Journey: Codable {
+    enum Limits {
+        static let generalAction = 500
+        static let personalAction = 250
+        static let triggerText = 100
+    }
     var version = 1
     var quitDate: Date
     var motivation: Motivation
@@ -109,11 +114,11 @@ struct Journey: Codable {
     }
 
     func usedCostOre(at now: Date) -> Double {
-        lapses.filter { $0.date >= quitDate && $0.date <= now }.reduce(0) { $0 + Double($1.count) * $1.unitCostOre }
+        countedLapses(at: now).reduce(0) { $0 + Double($1.count) * $1.unitCostOre }
     }
     func savingsKr(at now: Date) -> Double { max(0, baselineCostOre(at: now) - usedCostOre(at: now)) / 100 }
     func streakStart(at now: Date) -> Date {
-        max(quitDate, lapses.filter { $0.date <= now && $0.date >= quitDate }.map(\.date).max() ?? quitDate)
+        max(quitDate, countedLapses(at: now).map(\.date).max() ?? quitDate)
     }
     func streakDays(at now: Date) -> Int { Int(max(0, now.timeIntervalSince(streakStart(at: now))) / 86400) }
     func elapsedDays(at now: Date) -> Int { Int(max(0, now.timeIntervalSince(quitDate))) / 86400 }
@@ -124,7 +129,7 @@ struct Journey: Codable {
             let end = min(now, i + 1 < sorted.count ? sorted[i + 1].effectiveFrom : now)
             return total + max(0, end.timeIntervalSince(max(quitDate, b.effectiveFrom))) / 86400 * Double(b.consumption.pouchesPerDay)
         }
-        let used = lapses.filter { $0.date >= quitDate && $0.date <= now }.reduce(0) { $0 + $1.count }
+        let used = countedLapses(at: now).reduce(0) { $0 + $1.count }
         return max(0, Int(expected) - used)
     }
     mutating func updateConsumption(_ value: Consumption, at date: Date) {
@@ -133,7 +138,7 @@ struct Journey: Codable {
         else { baselines.removeAll { $0.effectiveFrom == date }; baselines.append(Baseline(effectiveFrom: date, consumption: value)) }
     }
     mutating func recordLapse(count: Int, trigger: String, at date: Date) -> UUID? {
-        guard (1...100).contains(count), date >= quitDate else { return nil }
+        guard (1...100).contains(count), date >= quitDate, trigger.count <= Limits.triggerText else { return nil }
         let lapse = Lapse(date: date, count: count, trigger: trigger, unitCostOre: consumption(at: date).pouchCostOre)
         lapses.append(lapse)
         return lapse.id
@@ -149,9 +154,10 @@ struct Journey: Codable {
         && baselines.map(\.effectiveFrom).min() == quitDate
         && Set(baselines.map(\.effectiveFrom)).count == baselines.count
         && (1...100000000).contains(goalOre) && !goalName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && goalName.count <= 80
-        && copingAction.count <= 500 && Set(triggers).count == triggers.count
+        && !triggers.isEmpty && Set(triggers).count == triggers.count
+        && !copingAction.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && copingAction.count <= Limits.generalAction
         && lapses.count <= 100000 && wins.count <= 100000 && reflections.count <= 10000
-        && lapses.allSatisfy { (1...100).contains($0.count) && $0.unitCostOre.isFinite && (0...100000).contains($0.unitCostOre) && $0.date >= quitDate && $0.trigger.count <= 100 }
+        && lapses.allSatisfy { (1...100).contains($0.count) && $0.unitCostOre.isFinite && (0...100000).contains($0.unitCostOre) && $0.date >= quitDate && $0.trigger.count <= Limits.triggerText }
         && reflections.allSatisfy(\.isValid)
         && Set(lapses.map(\.id)).count == lapses.count && Set(wins.map(\.id)).count == wins.count
         && Set(reflections.map(\.id)).count == reflections.count && Set(reflections.map(\.dayKey)).count == reflections.count
@@ -160,12 +166,7 @@ struct Journey: Codable {
 
 enum Danish {
     static func money(_ kroner: Double, decimals: Int = 0) -> String {
-        let formatter = NumberFormatter()
-        formatter.locale = Locale(identifier: "da_DK")
-        formatter.numberStyle = .decimal
-        formatter.minimumFractionDigits = decimals
-        formatter.maximumFractionDigits = decimals
-        return formatter.string(from: NSNumber(value: kroner)) ?? "0"
+        kroner.formatted(.number.locale(Locale(identifier: "da_DK")).grouping(.automatic).precision(.fractionLength(decimals)))
     }
     static func date(_ date: Date) -> String { date.formatted(.dateTime.day().month(.wide).locale(Locale(identifier: "da_DK"))) }
 }

@@ -5,6 +5,9 @@ private enum JournalEditor: Identifiable {
     case checkIn(DailyCheckIn), lapse(Lapse), win(CravingWin)
     var id: UUID { switch self { case .checkIn(let item): item.id; case .lapse(let item): item.id; case .win(let item): item.id } }
 }
+private enum JournalPayload {
+    case checkIn(DailyCheckIn), lapse(Lapse), win(CravingWin)
+}
 private struct JournalItem: Identifiable {
     let id: String
     let date: Date
@@ -12,9 +15,8 @@ private struct JournalItem: Identifiable {
     let detail: String
     let symbol: String
     let filter: JournalFilter
-    var checkIn: DailyCheckIn? = nil
-    var lapseID: UUID? = nil
-    var winID: UUID? = nil
+    let payload: JournalPayload
+    var isLapse: Bool { if case .lapse = payload { true } else { false } }
 }
 
 struct JournalView: View {
@@ -25,12 +27,13 @@ struct JournalView: View {
     @State private var removal: JournalItem?
     private var items: [JournalItem] {
         guard let j = store.journey else { return [] }
-        let notes = j.reflections.map { JournalItem(id: "c-\($0.id)", date: $0.date, title: "Dit tjek ind", detail: "Overskud \($0.energy)/5 · trang \($0.craving)/4\n\($0.note)", symbol: "pencil", filter: .reflections, checkIn: $0) }
-        let pouches = j.lapses.map { JournalItem(id: "l-\($0.id)", date: $0.date, title: "\($0.count) \($0.count == 1 ? "pose" : "poser") · \($0.trigger)", detail: "− \(Danish.money(Double($0.count) * $0.unitCostOre / 100, decimals: 2)) kr. i dit estimat", symbol: "arrow.uturn.forward", filter: .pouches, lapseID: $0.id) }
-        let pauses = j.wins.map { JournalItem(id: "w-\($0.id)", date: $0.date, title: "Du kom videre fra trangen", detail: [$0.trigger, $0.action].compactMap { $0 }.joined(separator: " · "), symbol: "checkmark", filter: .pauses, winID: $0.id) }
+        let notes = j.reflections.map { JournalItem(id: "c-\($0.id)", date: $0.date, title: "Dit tjek ind", detail: "Overskud \($0.energy)/5 · trang \($0.craving)/4\n\($0.note)", symbol: "pencil", filter: .reflections, payload: .checkIn($0)) }
+        let pouches = j.lapses.map { JournalItem(id: "l-\($0.id)", date: $0.date, title: "\($0.count) \($0.count == 1 ? "pose" : "poser") · \($0.trigger)", detail: "− \(Danish.money(Double($0.count) * $0.unitCostOre / 100, decimals: 2)) kr. i dit estimat", symbol: "arrow.uturn.forward", filter: .pouches, payload: .lapse($0)) }
+        let pauses = j.wins.map { JournalItem(id: "w-\($0.id)", date: $0.date, title: "Du kom videre fra trangen", detail: [$0.trigger, $0.action].compactMap { $0 }.joined(separator: " · "), symbol: "checkmark", filter: .pauses, payload: .win($0)) }
         return (notes + pouches + pauses).filter { (filter == .all || $0.filter == filter) && (query.isEmpty || "\($0.title) \($0.detail)".localizedCaseInsensitiveContains(query)) }.sorted { $0.date > $1.date }
     }
     var body: some View {
+        let displayedItems = items
         AppScreen {
             VStack(spacing: 0) {
                 SheetHeader(title: "Historik og rettelser")
@@ -41,22 +44,23 @@ struct JournalView: View {
                 }.padding(.horizontal, 26).padding(.vertical, 18)
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 20) {
-                        if items.isEmpty { ContentUnavailableView(query.isEmpty ? "Her begynder din historie" : "Ingen noter fundet", systemImage: "book.closed", description: Text(query.isEmpty ? "Dine tjek ind, pauser og registrerede poser samles her." : "Prøv et andet ord eller filter.")) }
-                        ForEach(items) { item in
+                        if displayedItems.isEmpty { ContentUnavailableView(query.isEmpty ? "Her begynder din historie" : "Ingen noter fundet", systemImage: "book.closed", description: Text(query.isEmpty ? "Dine tjek ind, pauser og registrerede poser samles her." : "Prøv et andet ord eller filter.")) }
+                        ForEach(displayedItems) { item in
                             VStack(alignment: .leading, spacing: 9) {
                                 Label(item.title, systemImage: item.symbol).font(Ink.body(.headline))
                                 Text(item.date.formatted(.dateTime.day().month(.wide).year().hour().minute().locale(Locale(identifier: "da_DK")))).font(Ink.body(.caption)).foregroundStyle(Ink.muted)
                                 Text(item.detail.trimmingCharacters(in: .whitespacesAndNewlines)).font(Ink.body(.subheadline)).fixedSize(horizontal: false, vertical: true)
                                 HStack {
-                                    if let checkIn = item.checkIn { Button("Ret") { editor = .checkIn(checkIn) }.frame(minHeight: 44) }
-                                    if let id = item.lapseID, let lapse = store.journey?.lapses.first(where: { $0.id == id }) {
-                                        Button("Ret") { editor = .lapse(lapse) }.frame(minHeight: 44).accessibilityIdentifier("editLapse-\(id)")
-                                    }
-                                    if let id = item.winID, let win = store.journey?.wins.first(where: { $0.id == id }) {
-                                        Button("Ret") { editor = .win(win) }.frame(minHeight: 44).accessibilityIdentifier("editWin-\(id)")
+                                    switch item.payload {
+                                    case .checkIn(let checkIn):
+                                        Button("Ret") { editor = .checkIn(checkIn) }.frame(minHeight: 44)
+                                    case .lapse(let lapse):
+                                        Button("Ret") { editor = .lapse(lapse) }.frame(minHeight: 44).accessibilityIdentifier("editLapse-\(lapse.id)")
+                                    case .win(let win):
+                                        Button("Ret") { editor = .win(win) }.frame(minHeight: 44).accessibilityIdentifier("editWin-\(win.id)")
                                     }
                                     Spacer()
-                                    Button(item.lapseID == nil ? "Slet" : "Fortryd registrering") { removal = item }.frame(minHeight: 44)
+                                    Button(item.isLapse ? "Fortryd registrering" : "Slet") { removal = item }.frame(minHeight: 44)
                                 }.font(Ink.body(.subheadline, weight: .bold))
                                 Divider()
                             }
@@ -72,18 +76,21 @@ struct JournalView: View {
             case .win(let entry): WinFeedbackView(existing: entry)
             }
         }
-        .confirmationDialog(removal?.lapseID == nil ? "Slet denne note?" : "Fortryd disse poser?", isPresented: Binding(get: { removal != nil }, set: { if !$0 { removal = nil } }), titleVisibility: .visible) {
+        .confirmationDialog(removal?.isLapse == true ? "Fortryd disse poser?" : "Slet denne note?", isPresented: Binding(get: { removal != nil }, set: { if !$0 { removal = nil } }), titleVisibility: .visible) {
             Button("Ja, fjern registreringen", role: .destructive) {
                 guard let item = removal else { return }
-                _ = store.edit {
-                    if let id = item.checkIn?.id { $0.checkIns = $0.reflections.filter { $0.id != id } }
-                    if let id = item.lapseID { $0.lapses.removeAll { $0.id == id } }
-                    if let id = item.winID { $0.wins.removeAll { $0.id == id } }
+                switch item.payload {
+                case .checkIn(let checkIn):
+                    _ = store.deleteCheckIn(checkIn.id)
+                case .lapse(let lapse):
+                    store.undoLapse(lapse.id)
+                case .win(let win):
+                    _ = store.deleteWin(win.id)
                 }
                 removal = nil
             }
             Button("Behold", role: .cancel) { removal = nil }
-        } message: { Text(removal?.lapseID == nil ? "Denne note bliver fjernet fra din dagbog." : "Sparebeløb og stime beregnes igen uden disse poser.") }
+        } message: { Text(removal?.isLapse == true ? "Sparebeløb og stime beregnes igen uden disse poser." : "Denne note bliver fjernet fra din dagbog.") }
     }
 }
 

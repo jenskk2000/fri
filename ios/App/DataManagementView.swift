@@ -22,6 +22,7 @@ struct DataManagementView: View {
     @State private var message = ""
     @State private var confirmRestore = false
     @State private var usingBackup = false
+    @State private var backupAvailable: Bool?
     var body: some View {
         AppScreen {
             VStack(spacing: 0) {
@@ -37,7 +38,10 @@ struct DataManagementView: View {
                         }
                         PrimaryButton(title: "Indlæs en sikkerhedskopi", symbol: "square.and.arrow.down") { importing = true }.accessibilityIdentifier("importBackup")
                         Text("Kopien indeholder din plan, forbrug, noter og registreringer. Vælg selv, hvor du gemmer den. Del den kun med nogen, du ønsker skal se dine oplysninger.").font(Ink.body(.footnote)).foregroundStyle(Ink.muted)
-                        if (try? store.archive.loadBackup()) != nil {
+                        if backupAvailable == nil {
+                            ProgressView("Tjekker lokal kopi …").font(Ink.body(.footnote))
+                        }
+                        if backupAvailable == true {
                             Button("Gendan seneste lokale kopi") {
                                 do { candidate = try store.archive.loadBackup(); usingBackup = true }
                                 catch { message = "Den lokale kopi kunne ikke læses." }
@@ -59,6 +63,16 @@ struct DataManagementView: View {
                     }.padding(26)
                 }
             }
+        }
+        .task {
+            // Validate once per presentation, away from the UI thread. Re-read on
+            // selection so recovery always previews the current backup bytes.
+            let backupURL = store.archive.backupURL
+            let available = await Task.detached(priority: .utility) {
+                (try? JourneyArchive.decode(Data(contentsOf: backupURL))) != nil
+            }.value
+            guard !Task.isCancelled else { return }
+            backupAvailable = available
         }
         .fileImporter(isPresented: $importing, allowedContentTypes: [.json]) { result in
             do {

@@ -59,7 +59,7 @@ struct OnboardingView: View {
         if step == 2 { return input.value != nil }
         if step == 4 && startMode == 1 { return quitDate <= Date() }
         if step == 3 { return !triggers.isEmpty }
-        if step == 5 { return input.value != nil && !triggers.isEmpty && firstAction.count <= 250 }
+        if step == 5 { return input.value != nil && !triggers.isEmpty && firstAction.count <= Journey.Limits.generalAction }
         return true
     }
     var body: some View {
@@ -176,7 +176,7 @@ struct OnboardingView: View {
                 Text(triggers.first?.rawValue ?? "Når trangen kommer").font(Ink.body(.subheadline))
                 TextField(triggers.first?.suggestion ?? Trigger.routine.suggestion, text: $firstAction, axis: .vertical)
                     .lineLimit(2...5).font(Ink.body(.body)).accessibilityIdentifier("firstCopingAction")
-                Text("Ret forslaget, hvis noget andet passer dig bedre. Højst 250 tegn.").font(Ink.body(.caption)).foregroundStyle(Ink.muted)
+                Text("Ret forslaget, hvis noget andet passer dig bedre. Højst \(Journey.Limits.generalAction) tegn.").font(Ink.body(.caption)).foregroundStyle(Ink.muted)
             }
             HStack(spacing: 12) {
                 Image(systemName: "calendar").font(Ink.body(.title2))

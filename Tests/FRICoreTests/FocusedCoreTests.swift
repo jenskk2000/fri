@@ -54,11 +54,14 @@ final class FocusedCoreTests: XCTestCase {
         _ = j.recordLapse(count: 1, trigger: "", at: midnight)
         XCTAssertEqual(j.dayStatus(on: midnight, at: now), .used)
         XCTAssertEqual(j.dayStatus(on: date("2026-03-28"), at: now), .unknown)
+        XCTAssertTrue(j.lapses(on: date("2026-03-28"), at: now).isEmpty)
+        XCTAssertEqual(j.lapses(on: midnight, at: now).count, 1)
     }
     func testLongDurationsUseCalendarYearsMonthsAndDays() {
         XCTAssertEqual(Danish.duration(from: date("2023-03-20"), to: date("2026-09-22")), "3 år, 6 måneder og 2 dage")
         XCTAssertEqual(Danish.duration(from: date("2026-03-29"), to: date("2026-03-30")), "1 dag")
         XCTAssertEqual(Danish.duration(from: date("2026-03-30"), to: date("2026-03-29")), "Ikke startet endnu")
+        XCTAssertEqual(Danish.fullDate(date("2026-03-30")), "30. marts 2026 kl. 00.00")
     }
     func testNewFieldsRoundTripAndOldArchivesMigrate() throws {
         var j = journey(); j.copingPlans = [CopingPlan(trigger: .coffee, action: "Tag tyggegummi frem")]
@@ -85,6 +88,27 @@ final class FocusedCoreTests: XCTestCase {
         j.wins.append(CravingWin(date: date("2026-03-29")))
         XCTAssertEqual(try JourneyArchive.decode(JSONEncoder().encode(j)).wins.count, 2)
     }
+    func testPauseTransitionsRejectCompetingSessionAndUpdateFeedback() {
+        var j = journey(); let first = UUID(), second = UUID(), end = date("2026-03-30")
+        XCTAssertTrue(j.startPause(id: first, until: end, trigger: .coffee))
+        XCTAssertFalse(j.startPause(id: second, until: end, trigger: .stress))
+        XCTAssertTrue(j.updatePauseTrigger(.stress)); XCTAssertEqual(j.pauseTrigger, .stress)
+        XCTAssertFalse(j.finishPause(id: second, at: end, trigger: nil, action: nil))
+        XCTAssertTrue(j.finishPause(id: first, at: end, trigger: " Stress ", action: " Gik en tur "))
+        XCTAssertTrue(j.updateWin(id: first, trigger: " Kaffe ", action: " Vand "))
+        XCTAssertEqual(j.wins[0].trigger, "Kaffe"); XCTAssertEqual(j.wins[0].action, "Vand")
+        XCTAssertFalse(j.updatePauseTrigger(.coffee))
+    }
+    func testUnchangedQuitDatePreservesBaselineIDs() {
+        var j = journey(); let ids = j.baselines.map(\.id)
+        XCTAssertTrue(j.correctQuitDate(to: j.quitDate)); XCTAssertEqual(j.baselines.map(\.id), ids)
+    }
+    func testDayLapsesOnlyCountRecordsKnownByNow() {
+        var j = journey(); let day = date("2026-03-29"), now = day.addingTimeInterval(3600)
+        _ = j.recordLapse(count: 1, trigger: "", at: now.addingTimeInterval(1))
+        XCTAssertTrue(j.lapses(on: day, at: now).isEmpty); XCTAssertEqual(j.dayStatus(on: day, at: now), .ongoing)
+        XCTAssertEqual(j.lapses.count, 1)
+    }
     func testLapseCorrectionUsesHistoricalPriceAndPreservesID() {
         var j = journey(); let early = date("2026-03-28"), late = date("2026-03-30"), now = date("2026-04-01")
         j.updateConsumption(Consumption(priceOre: 10000), at: date("2026-03-29"))
@@ -106,5 +130,7 @@ final class FocusedCoreTests: XCTestCase {
         j.copingPlans = [CopingPlan(trigger: .coffee, action: "A"), CopingPlan(trigger: .coffee, action: "B")]; XCTAssertFalse(j.isValid)
         j.copingPlans = nil
         j.wins = [CravingWin(date: date("2026-03-29"), action: String(repeating: "a", count: 251))]; XCTAssertFalse(j.isValid)
+        XCTAssertNil(Journey.date(forDayKey: "2026-+1-01"))
+        XCTAssertNil(Journey.date(forDayKey: "2026-01-+1"))
     }
 }

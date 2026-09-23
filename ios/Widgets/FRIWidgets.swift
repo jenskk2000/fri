@@ -3,10 +3,20 @@ import WidgetKit
 
 struct FRIEntry: TimelineEntry {
     let date: Date
-    let journey: Journey?
-    var saved: String { Danish.money(journey?.savingsKr(at: date) ?? 0) }
-    var days: Int { journey?.streakDays(at: date) ?? 0 }
-    var planned: Bool { (journey?.quitDate ?? .distantPast) > date }
+    let hasJourney: Bool
+    let saved: String
+    let days: Int
+    let planned: Bool
+    let discreet: Bool
+
+    init(date: Date, journey: Journey?) {
+        self.date = date
+        hasJourney = journey != nil
+        saved = Danish.money(journey?.savingsKr(at: date) ?? 0)
+        days = journey?.streakDays(at: date) ?? 0
+        planned = (journey?.quitDate ?? .distantPast) > date
+        discreet = journey?.discreetWidget ?? false
+    }
 }
 
 struct FRIProvider: TimelineProvider {
@@ -35,7 +45,7 @@ struct FRIWidgetView: View {
     private var accessory: Bool { family == .accessoryInline || family == .accessoryCircular || family == .accessoryRectangular }
     var body: some View {
         Group {
-            if entry.journey == nil {
+            if !entry.hasJourney {
                 if family == .accessoryInline { Text("FRI · Åbn FRI for at se din plan") }
                 else { VStack(alignment: .leading, spacing: 3) { Text("FRI").font(.headline); Text("Åbn FRI for at se din plan").font(.caption) } }
             } else {
@@ -52,7 +62,7 @@ struct FRIWidgetView: View {
                         RoundedRectangle(cornerRadius: 1).frame(width: 3)
                         VStack(alignment: .leading, spacing: 2) {
                             Text("\(entry.saved) kr. anslået").font(.headline).minimumScaleFactor(0.6).lineLimit(1)
-                            if entry.journey?.discreetWidget == true { Text("Mere plads til dig.").font(.caption) }
+                            if entry.discreet { Text("Mere plads til dig.").font(.caption) }
                             else { Text(entry.planned ? "Din start venter" : "\(entry.days) døgn siden noteret pose").font(.caption) }
                         }
                     }
@@ -63,7 +73,7 @@ struct FRIWidgetView: View {
                         Text("\(entry.saved) kr.").font(.system(size: 32, weight: .heavy, design: .default)).minimumScaleFactor(0.4).lineLimit(1)
                         Text("Anslået sparet").font(.caption)
                         Spacer(minLength: 0)
-                        if entry.journey?.discreetWidget != true { Text(entry.planned ? "Din start venter" : "\(entry.days) døgn siden noteret pose").font(.caption.bold()) }
+                        if !entry.discreet { Text(entry.planned ? "Din start venter" : "\(entry.days) døgn siden noteret pose").font(.caption.bold()) }
                     }.foregroundStyle(.white)
                 }
             }

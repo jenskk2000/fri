@@ -75,8 +75,15 @@ final class FRIUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-reset-state"]
         app.launch()
-        app.buttons["onboardingNext"].tap(); app.buttons["onboardingNext"].tap()
+        let next = app.buttons["onboardingNext"]
+        XCTAssertTrue(next.waitForExistence(timeout: 5))
+        next.tap()
+        // The welcome footer moves when the backup button disappears. Wait for
+        // the next screen before resolving the second tap's coordinates.
+        XCTAssertTrue(app.staticTexts["1 / 5"].waitForExistence(timeout: 5))
+        next.tap()
         let daily = app.textFields["dailyPouches"]
+        XCTAssertTrue(daily.waitForExistence(timeout: 5))
         daily.tap(); daily.typeText(XCUIKeyboardKey.delete.rawValue + XCUIKeyboardKey.delete.rawValue + "17")
         app.terminate(); app.launchArguments = ["-ui-testing"]; app.launch()
         XCTAssertTrue(app.textFields["dailyPouches"].waitForExistence(timeout: 5))
@@ -145,6 +152,38 @@ final class FRIUITests: XCTestCase {
         app.buttons["tab-Min plan"].tap()
         XCTAssertTrue(app.staticTexts["Flere penge."].exists)
         XCTAssertTrue(app.staticTexts[edited].exists)
+    }
+
+    @MainActor func testLongGeneralActionRemainsEditableAfterRelaunch() {
+        let app = XCUIApplication()
+        app.launchArguments = ["-ui-testing", "-reset-state", "-demo"]
+        app.launch()
+        app.buttons["tab-Min plan"].tap()
+        app.buttons["editPlan"].tap()
+        let action = app.textFields["copingAction"]
+        reveal(action, in: app)
+        action.tap()
+        action.typeText(String(repeating: "Mit eget skridt. ", count: 18))
+        let expected = action.value as? String ?? ""
+        XCTAssertGreaterThan(expected.count, 250)
+        XCTAssertLessThanOrEqual(expected.count, 500)
+        let save = app.buttons["savePlan"]
+        reveal(save, in: app)
+        XCTAssertTrue(save.isEnabled)
+        save.tap()
+        XCTAssertTrue(app.buttons["editPlan"].waitForExistence(timeout: 5))
+        app.terminate()
+        app.launchArguments = ["-ui-testing"]
+        app.launch()
+        app.buttons["tab-Min plan"].tap()
+        app.buttons["editPlan"].tap()
+        app.buttons["Flere penge"].tap()
+        reveal(action, in: app)
+        XCTAssertEqual(action.value as? String, expected)
+        reveal(save, in: app)
+        XCTAssertTrue(save.isEnabled)
+        save.tap()
+        XCTAssertTrue(app.staticTexts["Flere penge."].waitForExistence(timeout: 5))
     }
 
     @MainActor func testLocalBackupRestoresAndDismissesStaleEditors() {

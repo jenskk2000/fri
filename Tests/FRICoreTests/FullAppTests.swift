@@ -35,6 +35,13 @@ final class FullAppTests: XCTestCase {
         XCTAssertFalse(j.saveCheckIn(invalid))
         XCTAssertEqual(j.reflections, [entry])
     }
+    func testCheckInRemovalIsTargetedAndIdempotent() {
+        var j = journey(); let a = DailyCheckIn(date: start, dayKey: "2026-09-22", energy: 3, craving: 2, note: "a")
+        let b = DailyCheckIn(date: start, dayKey: "2026-09-23", energy: 4, craving: 1, note: "b")
+        XCTAssertTrue(j.saveCheckIn(a)); XCTAssertTrue(j.saveCheckIn(b))
+        XCTAssertTrue(j.removeCheckIn(id: a.id)); XCTAssertEqual(j.reflections, [b])
+        XCTAssertFalse(j.removeCheckIn(id: a.id))
+    }
     func testLocalDateKeysRespectTimezoneBoundary() {
         let date = Date(timeIntervalSince1970: 1_790_000_000)
         var a = Calendar(identifier: .gregorian); a.timeZone = TimeZone(secondsFromGMT: -12 * 3600)!

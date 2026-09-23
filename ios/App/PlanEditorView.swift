@@ -11,7 +11,8 @@ struct PlanEditorView: View {
     @State private var originalDate = Date()
     @State private var confirmDate = false
     private var corrected: Journey? {
-        guard var j = store.journey, j.correctQuitDate(to: quitDate) else { return nil }
+        guard var j = store.journey else { return nil }
+        if quitDate != j.quitDate, !j.correctQuitDate(to: quitDate) { return nil }
         return j
     }
     var body: some View {
@@ -33,7 +34,7 @@ struct PlanEditorView: View {
                         Text("Mit næste lille skridt").font(Ink.body(.headline))
                         TextField("Hvad vil du gøre, når trangen kommer?", text: $action, axis: .vertical).lineLimit(2...5)
                             .padding(16).background(Ink.surface, in: RoundedRectangle(cornerRadius: 12)).accessibilityIdentifier("copingAction")
-                        Text("Bruges, når du ikke har valgt en særlig handling til situationen. Højst 250 tegn.").font(Ink.body(.caption)).foregroundStyle(Ink.muted)
+                        Text("Bruges, når du ikke har valgt en særlig handling til situationen. Højst \(Journey.Limits.generalAction) tegn.").font(Ink.body(.caption)).foregroundStyle(Ink.muted)
                         ForEach(triggers) { trigger in
                             VStack(alignment: .leading, spacing: 8) {
                                 Eyebrow(text: trigger.rawValue)
@@ -60,7 +61,7 @@ struct PlanEditorView: View {
                         }
                         PrimaryButton(title: "Gem min plan", symbol: "checkmark") {
                             if quitDate != originalDate { confirmDate = true } else { save() }
-                        }.disabled(triggers.isEmpty || action.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || action.count > 250 || actions.values.contains(where: { $0.count > 250 }) || corrected == nil).accessibilityIdentifier("savePlan")
+                        }.disabled(triggers.isEmpty || action.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || action.count > Journey.Limits.generalAction || actions.values.contains(where: { $0.count > Journey.Limits.personalAction }) || corrected == nil).accessibilityIdentifier("savePlan")
                     }.padding(26)
                 }.scrollDismissesKeyboard(.interactively)
             }
@@ -74,13 +75,6 @@ struct PlanEditorView: View {
         } message: { Text("Dine besparelser og stimer beregnes med den nye startdato. Registreringerne i dagbogen bevares.") }
     }
     private func save() {
-        guard var next = corrected else { return }
-        next.motivation = motivation; next.triggers = triggers
-        next.copingAction = action.trimmingCharacters(in: .whitespacesAndNewlines)
-        next.copingPlans = triggers.compactMap { trigger in
-            let text = (actions[trigger] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
-            return text.isEmpty ? nil : CopingPlan(trigger: trigger, action: text)
-        }
-        if store.commit(next) { store.notice = "Din plan er opdateret."; dismiss() }
+        if store.savePlan(quitDate: quitDate, motivation: motivation, triggers: triggers, copingAction: action, personalActions: actions) { dismiss() }
     }
 }

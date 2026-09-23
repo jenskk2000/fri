@@ -53,6 +53,8 @@ Widgets prepare 24 hours of 15-minute entries; iOS controls update timing. In-ap
 
 `JourneyArchive` stores JSON in `group.dk.fri.shared`, using atomic writes and iOS protection after first unlock. Optional new fields preserve the original v1 MVP format. Imports reject unsupported versions, invalid values/dates, duplicate IDs, inconsistent baselines and oversized files before replacing data.
 
+General coping actions support 500 characters throughout onboarding, import and editing; situation-specific actions support 250. Older v1 plans with empty required plan fields receive usable defaults on load, preserving their history. Nonempty valid actions are not truncated.
+
 Every save retains the previous valid version as `.previous`. Explicit restore preserves unreadable primary bytes as `.unreadable`. Neither is transmitted. User-exported files and system backups remain under the user's control. Import replaces rather than merges and resets open editors to prevent stale settings from overwriting restored data.
 
 Daily check-ins store a local date key, stable if the phone changes time zone. Reminders follow the phone's local time. Self-reports are not interpreted as medical results.
@@ -69,7 +71,7 @@ Daily check-ins store a local date key, stable if the phone changes time zone. R
 
 Debug-only arguments: `-ui-testing` selects an isolated archive; `-reset-state` clears only the test archive, draft and appearance; `-demo` seeds an empty selected archive with 15 illustrative days; `-fast-timer` uses two seconds for timer tests. Release builds compile these out. Never use `-demo` on a real user's archive.
 
-The normal development simulator currently contains illustrative QA data. A fresh installation starts onboarding.
+The normal development simulator archive may contain user edits and must be preserved. Automated tests use isolated data. A fresh installation starts onboarding.
 
 ## Design and references
 
@@ -79,4 +81,4 @@ See [design/dark-editorial/IMPLEMENTATION.md](design/dark-editorial/IMPLEMENTATI
 Support: [Stoplinien](https://www.stoplinien.dk/om-os/tilbud).
 Technical references: [Apple file import](https://developer.apple.com/documentation/swiftui/view/fileimporter(ispresented:allowedcontenttypes:oncompletion:)), [Observation](https://developer.apple.com/documentation/swiftui/managing-model-data-in-your-app), [WidgetKit timelines](https://developer.apple.com/documentation/widgetkit/timelineprovider).
 
-See [verification/focused-core/VERIFIED.md](verification/focused-core/VERIFIED.md) for current verification. [verification/FULL-APP.md](verification/FULL-APP.md) records the earlier broader version and distribution gates. The older `VERIFIED.md` documents the initial MVP only.
+See [verification/reliability-pass/VERIFIED.md](verification/reliability-pass/VERIFIED.md) for the latest reliability checks and measurements, and [verification/focused-core/VERIFIED.md](verification/focused-core/VERIFIED.md) for the preceding product verification. [verification/FULL-APP.md](verification/FULL-APP.md) records the earlier broader version and distribution gates. The older `VERIFIED.md` documents the initial MVP only.
