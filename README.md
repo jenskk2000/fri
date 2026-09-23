@@ -15,7 +15,7 @@ swift test
 
 Run the **FRI** scheme's UI tests in Xcode. Tests use separate journey, onboarding-draft and appearance storage. Reminder testing temporarily schedules then removes a local notification in the simulator.
 
-For physical devices, use your Apple team and owned app/extension/App Group identifiers. Follow [release/APP-STORE.md](release/APP-STORE.md). The app has not been uploaded or submitted to the App Store.
+For physical devices, use your Apple team and owned app/extension/App Group identifiers. Follow [release/APP-STORE.md](release/APP-STORE.md). Before each upload run `release/preflight.sh` (blocker checks plus an unsigned Release archive); `release/screenshots.sh` regenerates the 6.9" App Store screenshots from demo data, and `site/` holds the public privacy/support pages. The app has not been uploaded or submitted to the App Store.
 
 ## Three core features
 

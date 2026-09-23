@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		02F253832FFFDD9362CA4CB8 /* DataManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6502EECBEB4451E2323EA233 /* DataManagementView.swift */; };
 		03D1671ADF31234857B76436 /* Montserrat-OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 69372742AB7DA8E138931445 /* Montserrat-OFL.txt */; };
+		08C07C5233885DE2C8F54F7F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C4590603D6D457F65BBCCA0E /* PrivacyInfo.xcprivacy */; };
 		0E96A1FC0620CAB594E9E290 /* Reflection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 215AEA862DB106BC1473CBA5 /* Reflection.swift */; };
 		2B2768C56B09280ECCF3F17B /* FRIUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38E2D1C6AB0E7ACB96A56AA2 /* FRIUITests.swift */; };
 		38F30A0F4B256CD14C237DA2 /* JournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51DA342CE1DB1592641A2C1B /* JournalView.swift */; };
@@ -27,6 +28,7 @@
 		88A8D21921853316242161D1 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0326FB8FCD348DB8BFFB6521 /* MainView.swift */; };
 		906E6081C53C16285F2A3C94 /* FocusedCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9AAFFEF165EC0A3178702D5 /* FocusedCore.swift */; };
 		AD6339E7A1DA484E0458CA32 /* CheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BDFBA98E6E79A4A62E68CB /* CheckInView.swift */; };
+		AD8F5AE8DEDA640D055A90AF /* AppStoreScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55C0E400D4B8DE8A89BF0B7 /* AppStoreScreenshots.swift */; };
 		BBB1E186F4F1E220A02A00B1 /* SupportViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A593ACB2B9FC685BC0439A /* SupportViews.swift */; };
 		BFA2B568E02AB21BE8B135F6 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07EFD90AA81D2C3D60307F7E /* Montserrat-ExtraBold.ttf */; };
 		CBDADC3F34D96305D22ABDD8 /* JourneyArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFD324C5367A1A51ED2C778 /* JourneyArchive.swift */; };
@@ -94,12 +96,14 @@
 		B7270D01D27F7295B0E9EA34 /* FRIUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = FRIUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BEFD324C5367A1A51ED2C778 /* JourneyArchive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JourneyArchive.swift; sourceTree = "<group>"; };
 		C2DD0D4224DC82D5C7208832 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		C4590603D6D457F65BBCCA0E /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C642E2E0087E48FE5691C43B /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		C712CCF7D6CEC9FF02234E48 /* Inter-OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = "Inter-OFL.txt"; sourceTree = "<group>"; };
 		CBEA8A35498A950CDC609541 /* AppStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStore.swift; sourceTree = "<group>"; };
 		D8A593ACB2B9FC685BC0439A /* SupportViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupportViews.swift; sourceTree = "<group>"; };
 		D9AAFFEF165EC0A3178702D5 /* FocusedCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FocusedCore.swift; sourceTree = "<group>"; };
 		DC8335CA52A1EDD9C78089C4 /* ReminderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderView.swift; sourceTree = "<group>"; };
+		E55C0E400D4B8DE8A89BF0B7 /* AppStoreScreenshots.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppStoreScreenshots.swift; sourceTree = "<group>"; };
 		E9BDFBA98E6E79A4A62E68CB /* CheckInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckInView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -130,6 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				1F4EC86C4BA54DB87231F28D /* FRIWidgets.swift */,
+				C4590603D6D457F65BBCCA0E /* PrivacyInfo.xcprivacy */,
 			);
 			path = Widgets;
 			sourceTree = "<group>";
@@ -172,6 +177,7 @@
 		963768B74B218E19F4AA16DB /* UITests */ = {
 			isa = PBXGroup;
 			children = (
+				E55C0E400D4B8DE8A89BF0B7 /* AppStoreScreenshots.swift */,
 				38E2D1C6AB0E7ACB96A56AA2 /* FRIUITests.swift */,
 			);
 			path = UITests;
@@ -213,6 +219,7 @@
 			buildConfigurationList = 93EA36841B1360DFDB5677F9 /* Build configuration list for PBXNativeTarget "FRIWidgets" */;
 			buildPhases = (
 				51CCCEF862CDC79C716AC61D /* Sources */,
+				F0623532D0C7087A3C506C62 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -255,16 +262,16 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					2E8389AA6BC10897996FB538 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 6L7V266587;
 						ProvisioningStyle = Automatic;
 						TestTargetID = F9487DF8F91DDF855858725F;
 					};
 					C3F9B36BA15A59C11599822A = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 6L7V266587;
 						ProvisioningStyle = Automatic;
 					};
 					F9487DF8F91DDF855858725F = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = 6L7V266587;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -301,6 +308,14 @@
 				BFA2B568E02AB21BE8B135F6 /* Montserrat-ExtraBold.ttf in Resources */,
 				03D1671ADF31234857B76436 /* Montserrat-OFL.txt in Resources */,
 				45689FD2AF362DCED248B529 /* PrivacyInfo.xcprivacy in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F0623532D0C7087A3C506C62 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08C07C5233885DE2C8F54F7F /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +363,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD8F5AE8DEDA640D055A90AF /* AppStoreScreenshots.swift in Sources */,
 				2B2768C56B09280ECCF3F17B /* FRIUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -382,7 +398,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dk.fri.app.widgets;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -423,7 +439,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6L7V266587;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -461,7 +477,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = dk.fri.app.widgets;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -480,7 +496,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dk.fri.app;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -538,7 +554,7 @@
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 6;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 6L7V266587;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -601,7 +617,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = dk.fri.app;
 				SDKROOT = iphoneos;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};

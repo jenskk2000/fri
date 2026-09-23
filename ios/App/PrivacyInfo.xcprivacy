@@ -4,5 +4,11 @@
   <key>NSPrivacyTracking</key><false/>
   <key>NSPrivacyTrackingDomains</key><array/>
   <key>NSPrivacyCollectedDataTypes</key><array/>
-  <key>NSPrivacyAccessedAPITypes</key><array/>
+  <key>NSPrivacyAccessedAPITypes</key><array>
+    <!-- AppearancePreference stores the Lys/Mørk/System choice in the app's own UserDefaults. -->
+    <dict>
+      <key>NSPrivacyAccessedAPIType</key><string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+      <key>NSPrivacyAccessedAPITypeReasons</key><array><string>CA92.1</string></array>
+    </dict>
+  </array>
 </dict></plist>

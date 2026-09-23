@@ -1,6 +1,10 @@
 import SwiftUI
 import UserNotifications
 
+enum AppInfo {
+    static var version: String { Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "1.0" }
+}
+
 struct SettingsView: View {
     @Environment(AppStore.self) private var store
     @Environment(\.dismiss) private var dismiss
@@ -42,7 +46,7 @@ struct SettingsView: View {
                         Button { subSheet = .data } label: { Label("Sikkerhedskopi og gendannelse", systemImage: "externaldrive").font(Ink.body(.headline)).frame(minHeight: 44) }.accessibilityIdentifier("dataSettings")
                         Button { subSheet = .privacy } label: { Label("Privatliv og hjælp", systemImage: "hand.raised").font(Ink.body(.headline)).frame(minHeight: 44) }.accessibilityIdentifier("privacyHelp")
                         Button("Slet mine data og start forfra", role: .destructive) { confirmReset = true }.font(Ink.body(.subheadline)).frame(minHeight: 44).padding(.top, 15)
-                        Text("FRI · Version 1.0\nLavet til en friere hverdag.").font(Ink.body(.caption)).foregroundStyle(Ink.muted).padding(.bottom, 10)
+                        Text("FRI · Version \(AppInfo.version)\nLavet til en friere hverdag.").font(Ink.body(.caption)).foregroundStyle(Ink.muted).padding(.bottom, 10)
                     }.padding(26)
                 }.scrollDismissesKeyboard(.interactively).scrollIndicators(.hidden)
             }

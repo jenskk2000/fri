@@ -29,9 +29,16 @@ final class FRIUITests: XCTestCase {
         XCTAssertEqual(app.buttons["appearance-light"].value as? String, "Valgt")
     }
 
+    /// XCUITest reports elements under the keyboard as hittable, so also require them to sit above it.
+    @MainActor private func isReachable(_ element: XCUIElement, in app: XCUIApplication) -> Bool {
+        guard element.isHittable else { return false }
+        let keyboard = app.keyboards.firstMatch
+        return !keyboard.exists || element.frame.maxY <= keyboard.frame.minY
+    }
+
     @MainActor private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
         for _ in 0..<24 {
-            if element.isHittable { break }
+            if isReachable(element, in: app) { break }
             let region = app.scrollViews.firstMatch.frame
             let keyboardTop = app.keyboards.firstMatch.exists ? app.keyboards.firstMatch.frame.minY : app.frame.maxY
             let top = max(region.minY, app.frame.minY + 80)
@@ -43,7 +50,7 @@ final class FRIUITests: XCTestCase {
             let origin = app.coordinate(withNormalizedOffset: .zero)
             origin.withOffset(CGVector(dx: app.frame.midX, dy: startY)).press(forDuration: 0.05, thenDragTo: origin.withOffset(CGVector(dx: app.frame.midX, dy: endY)))
         }
-        XCTAssertTrue(element.isHittable)
+        XCTAssertTrue(isReachable(element, in: app))
     }
 
     private func dayID(offset: Int) -> String {
@@ -295,6 +302,9 @@ final class FRIUITests: XCTestCase {
         let coffee = app.textFields["action-Til kaffen"]; reveal(coffee, in: app)
         coffee.tap(); coffee.typeText("Tag tyggegummi frem.")
         let save = app.buttons["savePlan"]; reveal(save, in: app); save.tap()
+        // Wait for the editor sheet (and keyboard) to finish dismissing before using the tab bar.
+        let tabReady = XCTNSPredicateExpectation(predicate: NSPredicate(format: "hittable == true"), object: app.buttons["tab-I dag"])
+        XCTAssertEqual(XCTWaiter().wait(for: [tabReady], timeout: 5), .completed)
         app.buttons["tab-I dag"].tap(); app.buttons["cravingHelp"].tap()
         app.buttons["cravingSituation"].tap(); app.buttons["Til kaffen"].tap()
         XCTAssertEqual(app.staticTexts["activeCopingAction"].label, "Tag tyggegummi frem.")

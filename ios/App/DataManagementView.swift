@@ -112,7 +112,7 @@ struct PrivacyHelpView: View {
                         Link("Stoplinien · hjælp til dit stop ↗", destination: URL(string: "https://stoplinien.dk")!).font(Ink.body(.headline)).frame(minHeight: 44)
                         Link("Ring 80 31 31 31", destination: URL(string: "tel:80313131")!).font(Ink.body(.headline)).frame(minHeight: 44)
                         Text("Eksterne links åbner uden for FRI. Den pågældende tjenestes privatlivspolitik gælder dér.").font(Ink.body(.footnote)).foregroundStyle(Ink.muted)
-                        Text("FRI 1.0 · Privatlivstekst opdateret 22. september 2026").font(Ink.body(.caption)).foregroundStyle(Ink.muted)
+                        Text("FRI \(AppInfo.version) · Privatlivstekst opdateret 22. september 2026").font(Ink.body(.caption)).foregroundStyle(Ink.muted)
                     }.padding(26)
                 }
             }

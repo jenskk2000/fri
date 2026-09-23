@@ -1,12 +1,24 @@
 # FRI — free first release
 
-Status: local app and release preparation. Nothing has been uploaded or submitted.
+Status: the binary is App Store ready. `release/preflight.sh` checks configuration, assets and an unsigned Release archive. What remains needs the owner's Apple account and identity (see *Owner-dependent steps*). Nothing has been uploaded or submitted.
+
+## Readiness tooling
+
+- `release/preflight.sh` fails on upload/review blockers: empty team, device family, privacy manifests (including the UserDefaults `CA92.1` reason), icon size/alpha, 6.9" screenshots, unfilled public pages, archive warnings, and debug launch arguments leaking into Release.
+- `release/screenshots.sh` regenerates the 6.9" (1320 × 2868) screenshot set in `release/screenshots/6.9/` from isolated demo data (`AppStoreScreenshots` UI test, skipped in normal test runs). No real user data appears.
+- `site/` holds the public Danish pages (`index.html`, `privacy.html`, `support.html`). Replace `{{DEVELOPER_NAME}}` and `{{SUPPORT_EMAIL}}`, host them at HTTPS (e.g. GitHub Pages), and use `…/privacy.html` as the Privacy Policy URL and `…/support.html` as the Support URL.
+
+## Fixed during readiness pass (24 September 2026)
+
+- The build declared iPad support (`UIDeviceFamily` 1,2) because XcodeGen's target default overrode the project setting. That would have required iPad screenshots, iPad review and all-orientation support. Both targets are now pinned to iPhone only, which also removes the orientation warning.
+- The privacy manifest omitted the required reason for `UserDefaults` (appearance preference). Uploads without it are rejected (ITMS-91053). The widget extension now carries its own manifest.
+- In-app version labels read `CFBundleShortVersionString` instead of a hardcoded "1.0".
 
 ## Danish listing draft
 
 Name: **FRI – Stop med snus**
 Subtitle: **Mere frihed. Flere kroner.**
-Keywords: `snus,nikotin,nikotinposer,stop,vaner,opsparing,trang,dagbog`
+Keywords: `nikotin,nikotinposer,nikotinstop,snusstop,tobak,vaner,opsparing,trang,abstinenser,afvænning,dagbog` (98/100; "snus" and "stop" are already indexed from the name, and competitor trademarks are deliberately excluded per guideline 2.3.7)
 Category: Health & Fitness
 Business model: free, no purchases, ads or account.
 
@@ -57,7 +69,9 @@ All artwork is bundled. No health diagnosis, treatment recommendation, measured 
 - In-app purchases/subscription: none.
 - Encryption: uses only standard platform facilities; `ITSAppUsesNonExemptEncryption = false`.
 - Permissions: notifications, requested only by a deliberate opt-in. File picker grants access to a user-selected backup.
-- Age rating: complete Apple's current questionnaire honestly; target audience 18–35 does not itself determine the platform rating.
+- Age rating: complete Apple's current questionnaire honestly. The app references tobacco/nicotine use (in a cessation context) and contains health/wellness content. Answer those questions accordingly rather than "None"; target audience 18–35 does not itself determine the platform rating.
+- Screenshots: upload `release/screenshots/6.9/*.png` for the 6.9" iPhone size; App Store Connect scales them for smaller iPhones. No iPad set is needed (iPhone-only build).
+- Privacy Nutrition Label: "Data Not Collected".
 - Accessibility: large-text layouts and labels are implemented; do not claim full VoiceOver certification before a real-device assistive-technology pass.
 
 ## Owner-dependent steps before TestFlight / App Store
