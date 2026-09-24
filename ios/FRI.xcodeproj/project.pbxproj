@@ -20,6 +20,7 @@
 		516F872E9B6957E3C26D7A9A /* Inter.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 39D581E65B8A21F3EDA7CF7B /* Inter.ttf */; };
 		57270ACCC9DC70D663E426CF /* Inter-OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = C712CCF7D6CEC9FF02234E48 /* Inter-OFL.txt */; };
 		596BF21098498F9460F83033 /* AppStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CBEA8A35498A950CDC609541 /* AppStore.swift */; };
+		5C92944E162680FCF208048F /* QuitPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248F0C698CB9C77122CFB27F /* QuitPhase.swift */; };
 		6382B0D15E86005F2E5B234B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 227021D954F6BF79705224BC /* Assets.xcassets */; };
 		67FBDA17D283081F92A4ED31 /* Journey.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAC8EE5054312F4E4D1E730C /* Journey.swift */; };
 		7850D830FE9E9E1CECC864D7 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C642E2E0087E48FE5691C43B /* OnboardingView.swift */; };
@@ -29,6 +30,7 @@
 		906E6081C53C16285F2A3C94 /* FocusedCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9AAFFEF165EC0A3178702D5 /* FocusedCore.swift */; };
 		AD6339E7A1DA484E0458CA32 /* CheckInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9BDFBA98E6E79A4A62E68CB /* CheckInView.swift */; };
 		AD8F5AE8DEDA640D055A90AF /* AppStoreScreenshots.swift in Sources */ = {isa = PBXBuildFile; fileRef = E55C0E400D4B8DE8A89BF0B7 /* AppStoreScreenshots.swift */; };
+		B4BE9CFE4FAC2C77E752A8C9 /* QuitPhase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 248F0C698CB9C77122CFB27F /* QuitPhase.swift */; };
 		BBB1E186F4F1E220A02A00B1 /* SupportViews.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A593ACB2B9FC685BC0439A /* SupportViews.swift */; };
 		BFA2B568E02AB21BE8B135F6 /* Montserrat-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 07EFD90AA81D2C3D60307F7E /* Montserrat-ExtraBold.ttf */; };
 		CBDADC3F34D96305D22ABDD8 /* JourneyArchive.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFD324C5367A1A51ED2C778 /* JourneyArchive.swift */; };
@@ -80,6 +82,7 @@
 		1F4EC86C4BA54DB87231F28D /* FRIWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FRIWidgets.swift; sourceTree = "<group>"; };
 		215AEA862DB106BC1473CBA5 /* Reflection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reflection.swift; sourceTree = "<group>"; };
 		227021D954F6BF79705224BC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		248F0C698CB9C77122CFB27F /* QuitPhase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuitPhase.swift; sourceTree = "<group>"; };
 		2C5F292AF9E6E5EA23784544 /* AppearancePreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppearancePreference.swift; sourceTree = "<group>"; };
 		314D8DD4F2BC6BB9604DCD05 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		319E8EAD19B4E046CDD9F1A4 /* DayHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayHistoryView.swift; sourceTree = "<group>"; };
@@ -145,6 +148,7 @@
 				D9AAFFEF165EC0A3178702D5 /* FocusedCore.swift */,
 				AAC8EE5054312F4E4D1E730C /* Journey.swift */,
 				BEFD324C5367A1A51ED2C778 /* JourneyArchive.swift */,
+				248F0C698CB9C77122CFB27F /* QuitPhase.swift */,
 				215AEA862DB106BC1473CBA5 /* Reflection.swift */,
 			);
 			path = Shared;
@@ -330,6 +334,7 @@
 				906E6081C53C16285F2A3C94 /* FocusedCore.swift in Sources */,
 				67FBDA17D283081F92A4ED31 /* Journey.swift in Sources */,
 				CBDADC3F34D96305D22ABDD8 /* JourneyArchive.swift in Sources */,
+				5C92944E162680FCF208048F /* QuitPhase.swift in Sources */,
 				0E96A1FC0620CAB594E9E290 /* Reflection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -352,6 +357,7 @@
 				516011EA0F94359379A4A27F /* OnboardingDraft.swift in Sources */,
 				7850D830FE9E9E1CECC864D7 /* OnboardingView.swift in Sources */,
 				DAB4AC50BE42292775C602F4 /* PlanEditorView.swift in Sources */,
+				B4BE9CFE4FAC2C77E752A8C9 /* QuitPhase.swift in Sources */,
 				87D85FF29FC6DCB9401A0206 /* Reflection.swift in Sources */,
 				EA8DADF6734AB20F135E8DC6 /* ReminderView.swift in Sources */,
 				F2B260717778172C4A146932 /* SettingsView.swift in Sources */,
@@ -450,7 +456,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -571,7 +577,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MARKETING_VERSION = 1.0.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;

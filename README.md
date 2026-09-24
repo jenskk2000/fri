@@ -1,6 +1,6 @@
 # FRI
 
-A free, Danish, offline SwiftUI app for quitting snus and nicotine pouches. iOS 17+, iPhone. Light and dark editorial themes with waterfront photography, green accents and bold typography. No account, backend, analytics, advertising, paywall or third-party dependencies.
+A free, Danish, offline SwiftUI app for quitting snus and nicotine pouches. iOS 26+, iPhone. Light and dark editorial themes with waterfront photography, green accents and bold typography. No account, backend, analytics, advertising, paywall or third-party dependencies.
 
 ## Run
 
