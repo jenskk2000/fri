@@ -114,7 +114,7 @@ struct OnboardingView: View {
             Color.clear.frame(height: 115).accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 15) {
                 Eyebrow(text: "Din næste begyndelse")
-                (Text("Fylder snus\n") + Text("lidt for meget?").foregroundColor(Ink.mint))
+                Text("Fylder snus\n\(Text("lidt for meget?").foregroundStyle(Ink.mint))")
                     .scaledTitle(38).tracking(-1.3).fixedSize(horizontal: false, vertical: true)
                 Text("Få mere plads til dig selv.\nOg lad pengene blive hos dig.")
                     .font(Ink.body(.title3)).foregroundStyle(Ink.muted).lineSpacing(5)

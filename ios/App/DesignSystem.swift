@@ -9,6 +9,8 @@ enum Ink {
     static let mint = adaptive(light: 0x176B48, dark: 0x4ADE9B)
     static let muted = adaptive(light: 0x56635B, dark: 0xB0BAC7)
     static let line = adaptive(light: 0xD8DDD5, dark: 0x2D2F33)
+    /// Foreground on mint-tinted glass: paper on dark green, near-black on light green.
+    static let onMint = adaptive(light: 0xFEFEFA, dark: 0x0B0D12)
 
     private static func adaptive(light: UInt32, dark: UInt32) -> Color {
         Color(uiColor: UIColor { traits in
@@ -45,7 +47,7 @@ struct WaterfrontBackdrop: View {
         GeometryReader { proxy in
             Image("Waterfront").resizable().scaledToFill()
                 .frame(width: proxy.size.width, height: height, alignment: .center).clipped()
-                .overlay(Ink.background.opacity(colorScheme == .light ? 0.82 : 0.17))
+                .overlay(Ink.background.opacity(colorScheme == .light ? 0.58 : 0.17))
                 .overlay {
                     LinearGradient(stops: [.init(color: Ink.background.opacity(0.10), location: 0), .init(color: .clear, location: 0.32), .init(color: Ink.background.opacity(0.55), location: 0.62), .init(color: Ink.background, location: 1)], startPoint: .top, endPoint: .bottom)
                 }
@@ -74,22 +76,38 @@ struct BrandHeader: View {
     var settings: (() -> Void)? = nil
     var body: some View {
         HStack {
-            Text("FRI").font(.custom("MarkerFelt-Wide", fixedSize: 38)).italic().rotationEffect(.degrees(-6))
+            Text("FRI").font(.custom("MarkerFelt-Wide", fixedSize: 34)).italic().rotationEffect(.degrees(-6))
                 .foregroundStyle(Ink.mint).accessibilityLabel("FRI")
             Spacer()
             if let settings {
-                Button(action: settings) {
-                    Image(systemName: "gearshape").font(.system(size: 20, weight: .medium))
-                        .frame(width: 44, height: 44).background(Ink.background.opacity(0.40), in: Circle())
-                        .overlay(Circle().strokeBorder(Ink.line))
-                }.accessibilityLabel("Indstillinger").accessibilityIdentifier("settings")
+                GlassIconButton(symbol: "gearshape", label: "Indstillinger", action: settings).accessibilityIdentifier("settings")
             }
-        }.padding(.horizontal, 26).padding(.top, 6).padding(.bottom, 8)
+        }.padding(.horizontal, 22).padding(.top, 6).padding(.bottom, 8)
+    }
+}
+
+/// Round Liquid Glass control for toolbar-like actions (settings, close).
+struct GlassIconButton: View {
+    let symbol: String
+    let label: String
+    let action: () -> Void
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: symbol).font(.system(size: 16, weight: .semibold)).frame(width: 26, height: 26)
+        }.buttonStyle(.glass).buttonBorderShape(.circle)
+            .foregroundStyle(Ink.text).accessibilityLabel(label)
+    }
+}
+
+extension View {
+    /// Liquid Glass capsule for small floating status chips. Keep text short: glass never carries paragraphs.
+    func glassChip(tint: Color? = nil) -> some View {
+        padding(.horizontal, 14).padding(.vertical, 9)
+            .glassEffect(tint.map { .regular.tint($0) } ?? .regular, in: .capsule)
     }
 }
 
 struct PrimaryButton: View {
-    @Environment(\.isEnabled) private var isEnabled
     var title: String
     var symbol: String = "arrow.right"
     var action: () -> Void
@@ -98,11 +116,11 @@ struct PrimaryButton: View {
             HStack(spacing: 14) {
                 Text(title).font(Ink.body(.headline, weight: .bold)).fixedSize(horizontal: false, vertical: true)
                 Spacer(minLength: 4)
-                Image(systemName: symbol).font(.system(size: 20, weight: .medium))
-            }.padding(.horizontal, 24).padding(.vertical, 17).frame(minHeight: 58)
-                .foregroundStyle(Ink.background).background(Ink.text, in: Capsule())
-                .opacity(isEnabled ? 1 : 0.45)
-        }.buttonStyle(PressStyle()).sensoryFeedback(.selection, trigger: title)
+                Image(systemName: symbol).font(.system(size: 19, weight: .semibold))
+            }.padding(.horizontal, 10).padding(.vertical, 8).frame(maxWidth: .infinity, minHeight: 40)
+                .foregroundStyle(Ink.onMint)
+        }.buttonStyle(.glassProminent).tint(Ink.mint).controlSize(.large)
+            .sensoryFeedback(.selection, trigger: title)
     }
 }
 
@@ -173,8 +191,8 @@ struct NotePanel<Content: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 14, content: content)
             .frame(maxWidth: .infinity, alignment: .leading).padding(22)
-            .background(Ink.surface, in: RoundedRectangle(cornerRadius: 24))
-            .overlay(RoundedRectangle(cornerRadius: 24).strokeBorder(Ink.line))
+            .background(Ink.surface, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+            .overlay(RoundedRectangle(cornerRadius: 28, style: .continuous).strokeBorder(Ink.line))
     }
 }
 
@@ -185,10 +203,8 @@ struct SheetHeader: View {
         HStack {
             Text(title).font(Ink.body(.headline, weight: .semibold))
             Spacer()
-            Button { dismiss() } label: {
-                Image(systemName: "xmark").font(.system(size: 15, weight: .semibold)).frame(width: 44, height: 44).background(Ink.surface, in: Circle())
-            }.foregroundStyle(Ink.text).accessibilityLabel("Luk")
-        }.padding(.horizontal, 24).padding(.top, 18).padding(.bottom, 4)
+            GlassIconButton(symbol: "xmark", label: "Luk") { dismiss() }
+        }.padding(.horizontal, 22).padding(.top, 18).padding(.bottom, 4)
     }
 }
 

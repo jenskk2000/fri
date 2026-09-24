@@ -49,31 +49,42 @@ struct FRIWidgetView: View {
                 if family == .accessoryInline { Text("FRI · Åbn FRI for at se din plan") }
                 else { VStack(alignment: .leading, spacing: 3) { Text("FRI").font(.headline); Text("Åbn FRI for at se din plan").font(.caption) } }
             } else {
+                // Time leads, like the home screen. Discreet mode keeps showing only kroner.
+                let showDays = !entry.discreet && !entry.planned
+                let dayWord = entry.days == 1 ? "dag" : "dage"
                 switch family {
                 case .accessoryInline:
-                    Text("FRI · \(entry.saved) kr. anslået")
+                    Text(showDays ? "FRI · \(entry.days) \(dayWord) fri" : "FRI · \(entry.saved) kr. anslået")
                 case .accessoryCircular:
                     VStack(spacing: 0) {
-                        Text(entry.saved).font(.system(size: 23, weight: .bold, design: .default)).minimumScaleFactor(0.4).lineLimit(1)
-                        Text("kr. anslået").font(.system(size: 9))
+                        Text(showDays ? "\(entry.days)" : entry.saved).font(.system(size: 23, weight: .bold, design: .rounded)).minimumScaleFactor(0.4).lineLimit(1)
+                        Text(showDays ? dayWord : "kr. anslået").font(.system(size: 9))
                     }.containerBackground(for: .widget) { AccessoryWidgetBackground() }
                 case .accessoryRectangular:
                     HStack(spacing: 8) {
                         RoundedRectangle(cornerRadius: 1).frame(width: 3)
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("\(entry.saved) kr. anslået").font(.headline).minimumScaleFactor(0.6).lineLimit(1)
-                            if entry.discreet { Text("Mere plads til dig.").font(.caption) }
-                            else { Text(entry.planned ? "Din start venter" : "\(entry.days) døgn siden noteret pose").font(.caption) }
+                            if showDays {
+                                Text("\(entry.days) \(dayWord) fri").font(.headline).minimumScaleFactor(0.6).lineLimit(1)
+                                Text("\(entry.saved) kr. sparet").font(.caption)
+                            } else {
+                                Text("\(entry.saved) kr. anslået").font(.headline).minimumScaleFactor(0.6).lineLimit(1)
+                                Text(entry.planned && !entry.discreet ? "Din start venter" : "Mere plads til dig.").font(.caption)
+                            }
                         }
                     }
                 default:
-                    VStack(alignment: .leading, spacing: 6) {
+                    VStack(alignment: .leading, spacing: 4) {
                         HStack { Text("FRI").font(.custom("MarkerFelt-Wide", size: 24)).foregroundStyle(mint); Spacer(); Image(systemName: "arrow.up.right").foregroundStyle(mint) }
                         Spacer(minLength: 0)
-                        Text("\(entry.saved) kr.").font(.system(size: 32, weight: .heavy, design: .default)).minimumScaleFactor(0.4).lineLimit(1)
-                        Text("Anslået sparet").font(.caption)
-                        Spacer(minLength: 0)
-                        if !entry.discreet { Text(entry.planned ? "Din start venter" : "\(entry.days) døgn siden noteret pose").font(.caption.bold()) }
+                        if showDays {
+                            Text("\(entry.days)").font(.system(size: 52, weight: .heavy, design: .rounded)).minimumScaleFactor(0.4).lineLimit(1)
+                            Text("\(dayWord) fri").font(.caption.bold())
+                            Text("\(entry.saved) kr. sparet").font(.caption).foregroundStyle(mint)
+                        } else {
+                            Text("\(entry.saved) kr.").font(.system(size: 32, weight: .heavy, design: .rounded)).minimumScaleFactor(0.4).lineLimit(1)
+                            Text(entry.planned && !entry.discreet ? "Din start venter" : "Anslået sparet").font(.caption)
+                        }
                     }.foregroundStyle(.white)
                 }
             }
@@ -88,8 +99,8 @@ struct FRIWidgets: Widget {
     let kind = "FRISavings"
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: kind, provider: FRIProvider()) { entry in FRIWidgetView(entry: entry) }
-            .configurationDisplayName("Dine sparede kroner")
-            .description("En lille påmindelse om din frihed. Følg dine anslåede besparelser og din stime.")
+            .configurationDisplayName("Din frihed")
+            .description("Dage siden sidste pose og dine anslåede besparelser.")
             .supportedFamilies([.accessoryRectangular, .accessoryCircular, .accessoryInline, .systemSmall])
     }
 }

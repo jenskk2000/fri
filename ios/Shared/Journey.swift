@@ -20,12 +20,12 @@ enum Trigger: String, Codable, CaseIterable, Identifiable {
     var id: String { rawValue }
     var suggestion: String {
         switch self {
-        case .coffee: "Drik din næste kop et andet sted. Lad dåsen blive væk."
-        case .study: "Læg en kort pause ind. Rejs dig, og hent et glas vand."
-        case .work: "Tag din næste pause uden dåsen. Gå en lille tur."
-        case .party: "Fortæl en ven om din plan. Øv dit: ‘Nej tak, jeg er stoppet.’"
-        case .stress: "Giv dig selv et øjeblik. Sænk skuldrene, og træk vejret roligt."
-        case .routine: "Læg mærke til øjeblikket. Vælg én lille ting at gøre anderledes."
+        case .coffee: "Drik kaffen et nyt sted, og gå en tur bagefter."
+        case .study: "Rejs dig, og gå rask i 5 minutter."
+        case .work: "Tag trapperne, eller gå en tur uden dåsen."
+        case .party: "Sig det højt: ‘Nej tak, jeg bruger ikke snus.’"
+        case .stress: "Gå rask i 5 minutter, og lad trangen falde."
+        case .routine: "Rejs dig, og gør noget andet i 5 minutter."
         }
     }
 }

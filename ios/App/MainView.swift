@@ -10,26 +10,21 @@ struct MainView: View {
     @State private var tab = AppTab.today
     @State private var sheet: SheetRoute?
     var body: some View {
-        AppScreen(photograph: tab == .today) {
-            VStack(spacing: 0) {
-                BrandHeader { sheet = .settings }
-                Group {
-                    switch tab {
-                    case .today: HomeView(sheet: $sheet)
-                    case .plan: PlanView(sheet: $sheet)
-                    case .progress: ProgressScreen(sheet: $sheet)
-                    }
-                }.id(tab).frame(maxWidth: .infinity, maxHeight: .infinity)
-                if let notice = store.notice {
-                    HStack {
-                        Text(notice).font(.system(size: 12, weight: .medium))
-                        Spacer()
-                        Button { store.notice = nil } label: { Image(systemName: "xmark").frame(width: 32, height: 32) }.accessibilityLabel("Luk besked")
-                    }.padding(.horizontal, 24).background(Ink.text.opacity(0.07))
-                }
-                navigation
+        // The native tab bar provides the floating Liquid Glass bar and its scroll minimisation.
+        TabView(selection: $tab) {
+            Tab(AppTab.today.rawValue, systemImage: AppTab.today.symbol, value: AppTab.today) {
+                page(photograph: true) { HomeView(sheet: $sheet) }
+            }
+            Tab(AppTab.plan.rawValue, systemImage: AppTab.plan.symbol, value: AppTab.plan) {
+                page { PlanView(sheet: $sheet) }
+            }
+            Tab(AppTab.progress.rawValue, systemImage: AppTab.progress.symbol, value: AppTab.progress) {
+                page { ProgressScreen(sheet: $sheet) }
             }
         }
+        .tabBarMinimizeBehavior(.onScrollDown)
+        .tint(Ink.mint)
+        .onChange(of: tab) { store.notice = nil }
         .sheet(item: $sheet) { item in
             switch item {
             case .craving: CravingView()
@@ -55,24 +50,23 @@ struct MainView: View {
             }
         }
     }
-    private var navigation: some View {
-        VStack(spacing: 0) {
-            Rectangle().fill(Ink.text.opacity(0.16)).frame(height: 1)
-            HStack(spacing: 0) {
-                ForEach(AppTab.allCases, id: \.self) { item in
-                    Button {
-                        tab = item
-                        store.notice = nil
-                    } label: {
-                        VStack(spacing: 7) {
-                            Image(systemName: item.symbol).font(.system(size: 22, weight: tab == item ? .semibold : .regular))
-                            Text(item.rawValue).font(.system(.caption2, design: .default).weight(tab == item ? .bold : .medium))
-                        }.frame(maxWidth: .infinity).padding(.top, 15).padding(.bottom, 8)
-                            .foregroundStyle(tab == item ? Ink.mint : Ink.muted)
-                    }.buttonStyle(.plain).accessibilityIdentifier("tab-\(item.rawValue)").accessibilityAddTraits(tab == item ? [.isSelected] : [])
-                }
+    private func page<Content: View>(photograph: Bool = false, @ViewBuilder content: () -> Content) -> some View {
+        let inner = content()
+        return AppScreen(photograph: photograph) {
+            VStack(spacing: 0) {
+                BrandHeader { sheet = .settings }
+                inner.frame(maxWidth: .infinity, maxHeight: .infinity)
             }
-        }.background(Ink.background).dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+        }
+        .safeAreaInset(edge: .bottom) {
+            if let notice = store.notice {
+                HStack(spacing: 10) {
+                    Text(notice).font(Ink.body(.footnote, weight: .medium))
+                    Spacer(minLength: 4)
+                    Button { store.notice = nil } label: { Image(systemName: "xmark").frame(width: 28, height: 28) }.accessibilityLabel("Luk besked")
+                }.glassChip().padding(.horizontal, 16).padding(.bottom, 6).foregroundStyle(Ink.text)
+            }
+        }
     }
 }
 
@@ -85,54 +79,99 @@ struct HomeView: View {
             if let journey = store.journey {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
-                        Spacer(minLength: typeSize.isAccessibilitySize ? 24 : max(70, proxy.size.height * 0.17))
-                        HomeLiveContent(journey: journey, sheet: $sheet)
-                        Spacer(minLength: 24)
+                        Spacer(minLength: typeSize.isAccessibilitySize ? 16 : max(40, proxy.size.height * 0.12))
+                        HomeClock(journey: journey, sheet: $sheet)
+                        Spacer(minLength: 26)
                         HomeActions(journey: journey, sheet: $sheet)
-                    }.padding(.horizontal, 26).padding(.bottom, 6).frame(minHeight: proxy.size.height, alignment: .bottomLeading)
+                    }.padding(.horizontal, 22).padding(.bottom, 8).frame(minHeight: proxy.size.height, alignment: .bottomLeading)
                 }.scrollIndicators(.hidden)
             }
         }
     }
 }
 
-private struct HomeLiveContent: View {
+/// The home screen's one job: the time since the last recorded pouch, and where it sits in the current phase.
+private struct HomeClock: View {
     let journey: Journey
     @Binding var sheet: SheetRoute?
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1)) { context in
-            let snapshot = HomeDisplaySnapshot(journey: journey, now: context.date)
+            let now = context.date
+            let planned = journey.quitDate > now
+            let reference = planned ? journey.quitDate : journey.streakStart(at: now)
+            let clock = ClockParts(seconds: abs(now.timeIntervalSince(reference)))
             VStack(alignment: .leading, spacing: 0) {
-                VStack(alignment: .leading, spacing: 11) {
-                    Text("DIN FRIHED, DAG FOR DAG").font(Ink.body(.caption, weight: .semibold)).tracking(2)
-                    (Text(snapshot.planned ? "Din nye" : journey.motivation.homeTitle) + Text("\n" + (snapshot.planned ? "begyndelse." : journey.motivation.homeAccent)).foregroundColor(Ink.mint))
-                        .scaledTitle(43).tracking(-1.5).fixedSize(horizontal: false, vertical: true)
-                }.padding(.bottom, 25)
-                Button { sheet = .savings } label: {
-                    VStack(alignment: .leading, spacing: 8) {
-                        Eyebrow(text: "Anslået sparet")
-                        HStack(alignment: .firstTextBaseline, spacing: 7) {
-                            Text(snapshot.saved).font(Ink.title(57)).tracking(-2).monospacedDigit()
-                            Text("kr.").font(Ink.title(27))
-                        }.lineLimit(1).minimumScaleFactor(0.35)
-                        Text("\(snapshot.dailyCost) kr. pr. døgn ud fra dit tidligere forbrug.")
-                            .font(Ink.body(.subheadline)).foregroundStyle(Ink.muted)
-                    }.frame(maxWidth: .infinity, alignment: .leading).contentShape(Rectangle())
-                }.buttonStyle(.plain).accessibilityIdentifier("savingsCounter")
-                    .accessibilityLabel("Anslået sparet \(snapshot.saved) kroner. Se beregning.")
-                HStack(spacing: 9) {
-                    Image(systemName: "calendar").foregroundStyle(Ink.mint)
-                    Text(snapshot.streak).font(Ink.body(.subheadline, weight: .medium))
-                }.padding(.horizontal, 16).padding(.vertical, 12)
-                    .overlay(Capsule().strokeBorder(Ink.text.opacity(0.4))).padding(.top, 19)
-                    .accessibilityElement(children: .combine)
-                Text(snapshot.planned ? "Du bestemmer tempoet." : "Siden sidste registrerede pose")
-                    .font(Ink.body(.caption)).foregroundStyle(Ink.muted).padding(.top, 8)
-                if journey.motivation == .money {
-                    Text("Dit mål: \(journey.goalName) · \(Danish.money(Double(journey.goalOre) / 100)) kr.")
-                        .font(Ink.body(.subheadline)).padding(.top, 12)
+                Text(planned ? "Din start nærmer sig." : "Jeg bruger ikke snus.")
+                    .font(Ink.body(.headline, weight: .semibold)).foregroundStyle(Ink.text.opacity(0.9))
+                Text("\(clock.days)").font(Ink.title(132)).tracking(-5).monospacedDigit()
+                    .lineLimit(1).minimumScaleFactor(0.4).padding(.top, 2).padding(.bottom, -12)
+                HStack(alignment: .firstTextBaseline, spacing: 12) {
+                    Text(planned ? (clock.days == 1 ? "dag til start" : "dage til start") : (clock.days == 1 ? "dag" : "dage"))
+                        .font(Ink.title(30))
+                    Text(clock.hms).font(Ink.body(.title2, weight: .semibold)).monospacedDigit().foregroundStyle(Ink.muted)
                 }
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(planned ? "\(clock.days) dage til din start" : "\(Danish.duration(from: reference, to: now)) siden sidste registrerede pose")
+                .accessibilityIdentifier("elapsedTime")
+
+                GlassEffectContainer(spacing: 10) {
+                    VStack(alignment: .leading, spacing: 10) {
+                        if let phase = journey.phase(at: now) { PhaseBar(phase: phase) }
+                        else { Text("Din start: \(Danish.fullDate(journey.quitDate))").font(Ink.body(.subheadline, weight: .semibold)).glassChip() }
+                        HStack(spacing: 10) {
+                            let saved = Danish.money(journey.savingsKr(at: now), decimals: 2)
+                            Button { sheet = .savings } label: {
+                                Text("\(saved) kr. sparet").font(Ink.body(.subheadline, weight: .semibold)).monospacedDigit().glassChip()
+                            }.buttonStyle(.plain).accessibilityIdentifier("savingsCounter")
+                                .accessibilityLabel("Anslået sparet \(saved) kroner. Se beregning.")
+                            if journey.phase(at: now)?.stage == .critical {
+                                Link(destination: Stoplinien.phone) {
+                                    Label("Rådgiver", systemImage: "phone.fill").font(Ink.body(.subheadline, weight: .semibold)).glassChip()
+                                }.accessibilityLabel("Ring gratis til Stoplinien")
+                            }
+                        }
+                    }
+                }.padding(.top, 22)
+            }.frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
+}
+
+private struct ClockParts {
+    let days: Int
+    let hms: String
+    init(seconds: TimeInterval) {
+        let total = Int(seconds)
+        days = total / 86400
+        hms = String(format: "%02d:%02d:%02d", (total % 86400) / 3600, (total % 3600) / 60, total % 60)
+    }
+}
+
+struct PhaseBar: View {
+    let phase: QuitPhase
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack {
+                Text(phase.title).font(Ink.body(.footnote, weight: .semibold))
+                Spacer()
+                Text(phase.daysLeft == 1 ? "1 dag tilbage" : "\(phase.daysLeft) dage tilbage")
+                    .font(Ink.body(.footnote, weight: .semibold)).foregroundStyle(Ink.mint).monospacedDigit()
             }
+            ProgressView(value: phase.fraction).tint(Ink.mint)
+        }.padding(.horizontal, 16).padding(.vertical, 12)
+            .glassEffect(.regular, in: .rect(cornerRadius: 20))
+            .accessibilityElement(children: .combine)
+    }
+}
+
+extension QuitPhase {
+    var title: String {
+        switch targetDays {
+        case 14: "De første 14 dage"
+        case 30: "Mod 1 måned"
+        case 90: "Mod 3 måneder"
+        case 180: "Mod 6 måneder"
+        default: targetDays == 365 ? "Mod 1 år" : "Mod \(targetDays / 365) år"
         }
     }
 }
@@ -143,25 +182,12 @@ private struct HomeActions: View {
     var body: some View {
         TimelineView(.periodic(from: .now, by: 1)) { context in
             let planned = journey.quitDate > context.date
-            VStack(spacing: 3) {
+            VStack(spacing: 4) {
                 PrimaryButton(title: journey.pauseEndsAt == nil ? "Jeg har lyst lige nu" : "Fortsæt min pause") { sheet = .craving }.accessibilityIdentifier("cravingHelp")
                 if !planned { QuietButton(title: "Jeg tog en pose") { sheet = .lapse }.accessibilityIdentifier("logLapse") }
                 else { QuietButton(title: "Se min forberedelse") { sheet = .craving } }
             }
         }
-    }
-}
-
-private struct HomeDisplaySnapshot {
-    let planned: Bool
-    let saved: String
-    let dailyCost: String
-    let streak: String
-    init(journey: Journey, now: Date) {
-        planned = journey.quitDate > now
-        saved = Danish.money(journey.savingsKr(at: now), decimals: 2)
-        dailyCost = Danish.money(journey.consumption(at: now).dailyCostOre / 100)
-        streak = planned ? "Din start: \(Danish.date(journey.quitDate))" : Danish.duration(from: journey.streakStart(at: now), to: now)
     }
 }
 
@@ -172,7 +198,7 @@ struct PlanView: View {
         ScrollView {
             if let journey = store.journey {
                 VStack(alignment: .leading, spacing: 24) {
-                    PageHeading(eyebrow: "Din grund", title: journey.motivation.rawValue + ".", subtitle: journey.motivation.detail)
+                    PageHeading(eyebrow: "Din grund", title: journey.motivation.rawValue + ".", subtitle: "")
                     Button { sheet = .editPlan } label: {
                         Label("Ret min plan", systemImage: "slider.horizontal.3").font(Ink.body(.headline)).frame(minHeight: 44)
                     }.accessibilityIdentifier("editPlan")
@@ -200,9 +226,9 @@ struct PlanView: View {
                         Label("Min påmindelse", systemImage: "bell").font(Ink.body(.headline)).frame(minHeight: 44)
                     }.accessibilityIdentifier("reminderSettings")
                     Button { sheet = .widget } label: {
-                        Label("Mine kroner på låseskærmen", systemImage: "iphone").font(Ink.body(.headline)).frame(minHeight: 44)
+                        Label("Widget på låseskærmen", systemImage: "iphone").font(Ink.body(.headline)).frame(minHeight: 44)
                     }.accessibilityIdentifier("widgetGuide")
-                    Link("Hjælp hos Stoplinien ↗", destination: URL(string: "https://stoplinien.dk")!).font(Ink.body(.subheadline)).frame(minHeight: 44)
+                    SupportCard()
                 }.padding(26)
             }
         }.scrollIndicators(.hidden)
@@ -221,11 +247,12 @@ struct ProgressScreen: View {
                     let preciseSavings = Danish.money(savingsKr, decimals: 2)
                     let roundedSavings = Danish.money(savingsKr)
                     VStack(alignment: .leading, spacing: 24) {
-                        PageHeading(eyebrow: "Dit overblik", title: "Det går fremad.", subtitle: "Din start: \(Danish.fullDate(j.quitDate)).")
+                        PageHeading(eyebrow: "Dit overblik", title: "Det går fremad.", subtitle: "")
+                        if let phase = j.phase(at: now) { PhaseBar(phase: phase) }
                         NotePanel {
                             Eyebrow(text: "Siden sidste registrerede pose")
-                            Text(Danish.duration(from: j.streakStart(at: now), to: now)).font(Ink.title(28)).accessibilityIdentifier("elapsedTime")
-                            Text("Tiden følger dine registreringer. Dage uden en registrering er ikke automatisk bekræftet uden snus.").font(Ink.body(.footnote)).foregroundStyle(Ink.muted)
+                            Text(Danish.duration(from: j.streakStart(at: now), to: now)).font(Ink.title(28))
+                            Text("Følger dine registreringer. Start: \(Danish.fullDate(j.quitDate)).").font(Ink.body(.footnote)).foregroundStyle(Ink.muted)
                         }
                         Button { sheet = .savings } label: {
                             VStack(alignment: .leading, spacing: 6) {
@@ -251,7 +278,7 @@ struct ProgressScreen: View {
                             Text("\(roundedSavings) af \(Danish.money(Double(j.goalOre) / 100)) kr.").font(Ink.body(.subheadline))
                             Button("Ret mit mål") { sheet = .settings }.font(Ink.body(.subheadline)).frame(minHeight: 44)
                         }
-                        Text("\(j.wins.count) \(j.wins.count == 1 ? "pause" : "pauser") registreret. Din tidligere indsats bliver hos dig.").font(Ink.body(.subheadline)).foregroundStyle(Ink.muted)
+                        Text("\(j.wins.count) \(j.wins.count == 1 ? "trang" : "trange") klaret").font(Ink.body(.subheadline)).foregroundStyle(Ink.muted)
                         Button("Tidligere milepæle") { sheet = .milestones }.font(Ink.body(.subheadline)).frame(minHeight: 44)
                     }.padding(26)
                 }

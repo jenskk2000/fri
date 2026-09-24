@@ -33,25 +33,38 @@ final class AppStoreScreenshots: XCTestCase {
         app.buttons["cravingHelp"].tap()
         XCTAssertTrue(app.buttons["startPause"].waitForExistence(timeout: 5))
         try capture("02-craving")
-        app.buttons["Luk"].firstMatch.tap()
+        scrollUntilHittable(app.buttons["startPause"], in: app)
+        app.buttons["startPause"].tap()
+        XCTAssertTrue(app.buttons["finishPause"].waitForExistence(timeout: 5))
+        app.swipeDown(velocity: .slow) // Back to the top of the sheet, not dismissing it.
+        try capture("03-craving-move")
+        let finish = app.buttons["finishPause"]; scrollUntilHittable(finish, in: app); finish.tap()
+        app.buttons["skipWinFeedback"].tap()
 
-        app.buttons["tab-Fremskridt"].tap()
-        try capture("03-progress")
+        app.tabBars.buttons["Fremskridt"].tap()
+        try capture("04-progress")
 
-        app.buttons["tab-Min plan"].tap()
-        try capture("04-plan")
+        app.tabBars.buttons["Min plan"].tap()
+        try capture("05-plan")
 
-        app.buttons["tab-I dag"].tap()
+        app.tabBars.buttons["I dag"].tap()
         app.buttons["settings"].tap()
         app.buttons["appearance-dark"].tap()
         app.buttons["Luk"].firstMatch.tap()
         XCTAssertTrue(app.buttons["savingsCounter"].waitForExistence(timeout: 5))
-        try capture("05-home-dark")
+        try capture("06-home-dark")
+
+        app.buttons["logLapse"].tap()
+        let confirm = app.buttons["confirmLapse"]
+        scrollUntilHittable(confirm, in: app); confirm.tap()
+        XCTAssertTrue(app.buttons["recommit"].waitForExistence(timeout: 5))
+        try capture("07-recommit")
+        app.buttons["recommit"].tap()
 
         app.terminate()
         app.launchArguments = ["-ui-testing", "-reset-state"]
         app.launch()
         XCTAssertTrue(app.buttons["onboardingNext"].waitForExistence(timeout: 10))
-        try capture("06-onboarding")
+        try capture("08-onboarding")
     }
 }
