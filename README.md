@@ -21,7 +21,7 @@ For physical devices, use your Apple team and owned app/extension/App Group iden
 
 1. **Trustworthy progress.** Live DKK estimates, calendar-based years/months/days since the last recorded pouch, exact start date, a 14-day history of explicitly confirmed completed days, recorded use and unknown days. Correct pouch count/time/situation or undo mistakes. Lock Screen widgets are another surface of this overview.
 2. **Your personal plan.** Brief, resumable onboarding with an editable first action. Motivation changes the Home heading. Each selected situation can have a specific action, with the original general action as a fallback. Optional reminders remain off until requested.
-3. **Help right now.** One tap from Home, an optional situation picker and a two-minute pause that survives closure. A persisted session ID prevents duplicate wins. Optional feedback records what helped and can be edited in History.
+3. **Help right now.** One tap from Home, an optional situation picker and a five-minute Stop → Move → Surf timer that survives closure. A persisted session ID prevents duplicate wins. Optional feedback records what helped and can be edited in History.
 
 Daily reflection cards and the weekly energy chart are removed from the main screens. Existing check-ins remain readable/editable in History; retained milestones are a secondary link. No new reflection prompts, missions or content library.
 

@@ -26,7 +26,7 @@ struct SettingsView: View {
                         PageHeading(eyebrow: "Din hverdag ændrer sig", title: "Gør planen\ntil din.", subtitle: "Nye forbrugstal gælder fra nu. Din historik bliver bevaret.")
                         AppearancePicker()
                         Divider()
-                        ConsumptionFields(input: $input)
+                        ConsumptionFields(input: $input, exactPrice: true)
                         VStack(alignment: .leading, spacing: 14) {
                             Eyebrow(text: "Noget at glæde dig til")
                             TextField("Hvad sparer du op til?", text: $goalName).textInputAutocapitalization(.sentences).accessibilityIdentifier("goalName")

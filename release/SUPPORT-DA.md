@@ -10,7 +10,7 @@ Udkast til offentlig supportside. Indsæt ejerens faktiske supportkontakt før o
 
 **Hvad betyder dagene?** Tiden siden sidste registrerede pose følger dine indtastninger. Kalenderen skelner mellem hele dage, du selv har bekræftet uden poser, dage med registrerede poser og ukendte dage. Kun afsluttede, hele dage efter stopdatoen kan bekræftes. Kalenderen følger dansk tid, også når du rejser. Brug Se en anden dato til at finde ældre dage.
 
-**Kan jeg tilpasse hjælpen?** Ja. Ret dit næste lille skridt i Min plan, og tilføj eventuelt en anden handling til hver svær situation. Under Hjælp lige nu kan du vælge situationen. Efter pausen kan du frivilligt notere, hvad der hjalp. Noten kan rettes i Historik.
+**Kan jeg tilpasse hjælpen?** Ja. Ret dit næste lille skridt i Min plan, og tilføj eventuelt en anden handling til hver svær situation. Under Jeg har lyst lige nu kan du vælge situationen. Efter pausen kan du frivilligt notere, hvad der hjalp. Noten kan rettes i Historik.
 
 **Hvor er mine gamle tjek ind?** De er bevaret under Fremskridt → Historik og rettelser. Forsiden fokuserer nu på fremgang, din plan og hjælp ved trang.
 

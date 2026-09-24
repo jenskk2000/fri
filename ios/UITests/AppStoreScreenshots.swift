@@ -23,6 +23,12 @@ final class AppStoreScreenshots: XCTestCase {
         for _ in 0..<6 where !element.isHittable { app.swipeUp() }
     }
 
+    @MainActor private func tab(_ name: String, in app: XCUIApplication) -> XCUIElement {
+        let button = app.tabBars.buttons[name]
+        for _ in 0..<3 where !button.isHittable { app.swipeDown() }
+        return button
+    }
+
     @MainActor func testCaptureAppStoreScreenshots() throws {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-reset-state", "-demo"]
@@ -41,13 +47,13 @@ final class AppStoreScreenshots: XCTestCase {
         let finish = app.buttons["finishPause"]; scrollUntilHittable(finish, in: app); finish.tap()
         app.buttons["skipWinFeedback"].tap()
 
-        app.tabBars.buttons["Fremskridt"].tap()
+        tab("Fremskridt", in: app).tap()
         try capture("04-progress")
 
-        app.tabBars.buttons["Min plan"].tap()
+        tab("Min plan", in: app).tap()
         try capture("05-plan")
 
-        app.tabBars.buttons["I dag"].tap()
+        tab("I dag", in: app).tap()
         app.buttons["settings"].tap()
         app.buttons["appearance-dark"].tap()
         app.buttons["Luk"].firstMatch.tap()

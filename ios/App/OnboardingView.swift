@@ -16,26 +16,80 @@ struct ConsumptionInput {
     }
 }
 
+/// Native controls for the consumption baseline: no keyboard needed. Settings can still type an exact price.
 struct ConsumptionFields: View {
     @Binding var input: ConsumptionInput
+    var exactPrice = false
     var body: some View {
-        VStack(spacing: 20) {
-            field("Poser om dagen", suffix: "poser", text: $input.daily, id: "dailyPouches", decimal: false)
-            field("Poser i en dåse", suffix: "poser", text: $input.tin, id: "tinPouches", decimal: false)
-            field("Pris for en dåse", suffix: "kr.", text: $input.price, id: "tinPrice", decimal: true)
+        VStack(spacing: 22) {
+            NumberDial(label: "Poser om dagen", unit: "poser", value: whole(\.daily, fallback: 10), range: 1...100, sliderRange: 1...40, id: "dailyPouches")
+            NumberDial(label: "Poser i en dåse", unit: "poser", value: whole(\.tin, fallback: 20), range: 1...100, id: "tinPouches")
+            if exactPrice {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Pris for en dåse").font(Ink.body(.subheadline, weight: .semibold))
+                    HStack {
+                        TextField("Pris for en dåse", text: $input.price).scaledTitle(30).keyboardType(.decimalPad)
+                            .accessibilityIdentifier("tinPrice").accessibilityLabel("Pris for en dåse")
+                        Text("kr.").font(Ink.body(.body)).foregroundStyle(Ink.muted)
+                    }.padding(.horizontal, 18).padding(.vertical, 12)
+                        .background(Ink.surface, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                }
+            } else {
+                NumberDial(label: "Pris for en dåse", unit: "kr.", value: price, range: 1...1000, id: "tinPrice",
+                           note: "Typisk pris i en kiosk. Ret den, hvis din er anderledes.")
+            }
         }
     }
-    private func field(_ label: String, suffix: String, text: Binding<String>, id: String, decimal: Bool) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(label).font(.system(.subheadline, design: .default).weight(.semibold))
-            HStack {
-                TextField(label, text: text).scaledTitle(30).keyboardType(decimal ? .decimalPad : .numberPad)
-                    .accessibilityIdentifier(id).accessibilityLabel(label)
-                Text(suffix).font(Ink.body(.body)).foregroundStyle(Ink.muted)
-            }.padding(.horizontal, 18).padding(.vertical, 12)
-                .background(Ink.surface, in: RoundedRectangle(cornerRadius: 14))
-                .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(Ink.text.opacity(0.2)))
+    private func whole(_ key: WritableKeyPath<ConsumptionInput, String>, fallback: Int) -> Binding<Int> {
+        Binding(get: { Int(input[keyPath: key]) ?? fallback }, set: { input[keyPath: key] = String($0) })
+    }
+    /// Whole kroner; steps drop any øre from an older exact price.
+    private var price: Binding<Int> {
+        Binding(get: { Int(Double(input.price.replacingOccurrences(of: ",", with: ".")) ?? 70) },
+                set: { input.price = String($0) })
+    }
+}
+
+struct NumberDial: View {
+    let label: String
+    let unit: String
+    @Binding var value: Int
+    let range: ClosedRange<Int>
+    var sliderRange: ClosedRange<Int>? = nil
+    let id: String
+    var note: String? = nil
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(label).font(Ink.body(.subheadline, weight: .semibold))
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                Text("\(value)").scaledTitle(40).monospacedDigit().contentTransition(.numericText(value: Double(value)))
+                    .accessibilityIdentifier(id)
+                Text(unit).font(Ink.body(.body)).foregroundStyle(Ink.muted)
+                Spacer()
+                GlassEffectContainer(spacing: 8) {
+                    HStack(spacing: 8) {
+                        step("minus", -1, label: "Mindre").disabled(value <= range.lowerBound)
+                        step("plus", 1, label: "Mere").disabled(value >= range.upperBound)
+                    }
+                }
+            }
+            if let sliderRange {
+                Slider(value: Binding(get: { Double(min(max(value, sliderRange.lowerBound), sliderRange.upperBound)) },
+                                      set: { value = Int($0.rounded()) }),
+                       in: Double(sliderRange.lowerBound)...Double(sliderRange.upperBound), step: 1)
+                    .tint(Ink.mint).accessibilityLabel(label).accessibilityValue("\(value) \(unit)")
+            }
+            if let note { Text(note).font(Ink.body(.caption)).foregroundStyle(Ink.muted) }
         }
+        .sensoryFeedback(.selection, trigger: value)
+        .accessibilityElement(children: .contain)
+    }
+    private func step(_ symbol: String, _ delta: Int, label: String) -> some View {
+        Button { withAnimation(.snappy) { value = min(range.upperBound, max(range.lowerBound, value + delta)) } } label: {
+            Image(systemName: symbol).font(.system(size: 17, weight: .bold)).frame(width: 30, height: 30)
+        }.buttonStyle(.glass).buttonBorderShape(.circle)
+            .buttonRepeatBehavior(.enabled)
+            .accessibilityLabel("\(label) \(self.label.lowercased())").accessibilityIdentifier("\(id)-\(symbol)")
     }
 }
 
@@ -46,7 +100,7 @@ struct OnboardingView: View {
     @State private var restored = false
     @State private var importingBackup = false
     @State private var motivation = Motivation.freedom
-    @State private var input = ConsumptionInput()
+    @State private var input = ConsumptionInput(Consumption(priceOre: Consumption.typicalPriceOre))
     @State private var triggers: [Trigger] = [.coffee]
     @State private var startMode = 0
     @State private var quitDate = Date()
@@ -133,7 +187,7 @@ struct OnboardingView: View {
             }
             Text("Det er din grund. Den er god nok.").font(Ink.hand(20)).padding(.top, 5)
         case 2:
-            PageHeading(eyebrow: "Lad os regne på det", title: "Hvad går der\npå en dag?", subtitle: "Tænk på en typisk dag før dit stop. Ret tallene, så de passer til dig.")
+            PageHeading(eyebrow: "Lad os regne på det", title: "Hvad går der\npå en dag?", subtitle: "")
             ConsumptionFields(input: $input)
             if let value = input.value {
                 HStack(alignment: .firstTextBaseline) {

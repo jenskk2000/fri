@@ -34,6 +34,8 @@ struct Consumption: Codable, Equatable {
     var pouchesPerDay: Int = 10
     var pouchesPerTin: Int = 20
     var priceOre: Int = 5000
+    /// Approximate Danish shop price for a 20-pouch tin after the 2024 tax increase; the onboarding default.
+    static let typicalPriceOre = 7000
     var isValid: Bool { (1...100).contains(pouchesPerDay) && (1...100).contains(pouchesPerTin) && (100...100000).contains(priceOre) }
     var pouchCostOre: Double { isValid ? Double(priceOre) / Double(pouchesPerTin) : 0 }
     var dailyCostOre: Double { pouchCostOre * Double(pouchesPerDay) }

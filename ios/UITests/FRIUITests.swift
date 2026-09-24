@@ -15,7 +15,7 @@ final class FRIUITests: XCTestCase {
         app.launch()
         app.buttons["settings"].tap()
         XCTAssertEqual(app.buttons["appearance-dark"].value as? String, "Valgt")
-        XCTAssertEqual(app.textFields["dailyPouches"].value as? String, "10")
+        XCTAssertEqual(app.staticTexts["dailyPouches"].label, "10")
         app.buttons["appearance-system"].tap()
         XCTAssertTrue(app.staticTexts["Følger telefonens lyse eller mørke udseende."].exists)
         app.terminate(); app.launch()
@@ -27,6 +27,13 @@ final class FRIUITests: XCTestCase {
         app.terminate(); app.launch()
         app.buttons["settings"].tap()
         XCTAssertEqual(app.buttons["appearance-light"].value as? String, "Valgt")
+    }
+
+    /// The glass tab bar minimises while scrolling down; scroll back up to expand it.
+    @MainActor func tab(_ name: String, in app: XCUIApplication) -> XCUIElement {
+        let button = app.tabBars.buttons[name]
+        for _ in 0..<3 where !button.isHittable { app.swipeDown() }
+        return button
     }
 
     /// XCUITest reports elements under the keyboard as hittable, so also require them to sit above it.
@@ -63,14 +70,14 @@ final class FRIUITests: XCTestCase {
     @MainActor func testConfirmedDaySurvivesRelaunchAndCanBeUndone() {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-reset-state", "-demo"]; app.launch()
-        app.tabBars.buttons["Fremskridt"].tap()
+        tab("Fremskridt", in: app).tap()
         let yesterday = app.buttons[dayID(offset: -1)]
         reveal(yesterday, in: app)
         XCTAssertTrue(yesterday.label.contains("Ikke bekræftet")); yesterday.tap()
         app.buttons["confirmDay"].tap()
         XCTAssertTrue(app.staticTexts["confirmedDaysCount"].label.contains("1 bekræftet dag"))
         app.terminate(); app.launchArguments = ["-ui-testing"]; app.launch()
-        app.tabBars.buttons["Fremskridt"].tap(); reveal(yesterday, in: app)
+        tab("Fremskridt", in: app).tap(); reveal(yesterday, in: app)
         XCTAssertTrue(yesterday.label.contains("Bekræftet uden poser")); yesterday.tap()
         app.buttons["unconfirmDay"].tap()
         XCTAssertTrue(yesterday.label.contains("Ikke bekræftet"))
@@ -89,12 +96,12 @@ final class FRIUITests: XCTestCase {
         // the next screen before resolving the second tap's coordinates.
         XCTAssertTrue(app.staticTexts["1 / 5"].waitForExistence(timeout: 5))
         next.tap()
-        let daily = app.textFields["dailyPouches"]
-        XCTAssertTrue(daily.waitForExistence(timeout: 5))
-        daily.tap(); daily.typeText(XCUIKeyboardKey.delete.rawValue + XCUIKeyboardKey.delete.rawValue + "17")
+        XCTAssertTrue(app.staticTexts["dailyPouches"].waitForExistence(timeout: 5))
+        for _ in 0..<7 { app.buttons["dailyPouches-plus"].tap() }
+        XCTAssertEqual(app.staticTexts["dailyPouches"].label, "17")
         app.terminate(); app.launchArguments = ["-ui-testing"]; app.launch()
-        XCTAssertTrue(app.textFields["dailyPouches"].waitForExistence(timeout: 5))
-        XCTAssertEqual(app.textFields["dailyPouches"].value as? String, "17")
+        XCTAssertTrue(app.staticTexts["dailyPouches"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["dailyPouches"].label, "17")
     }
 
     @MainActor func testPauseResumesAfterClosingApp() {
@@ -114,7 +121,7 @@ final class FRIUITests: XCTestCase {
     @MainActor func testReminderEnablePersistsAndCanBeDisabled() {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-reset-state", "-demo"]
-        app.launch(); app.tabBars.buttons["Min plan"].tap()
+        app.launch(); tab("Min plan", in: app).tap()
         let settings = app.buttons["reminderSettings"]; reveal(settings, in: app); settings.tap()
         let enable = app.buttons["enableReminder"]; reveal(enable, in: app); enable.tap()
         let springboard = XCUIApplication(bundleIdentifier: "com.apple.springboard")
@@ -137,7 +144,7 @@ final class FRIUITests: XCTestCase {
         let start = app.buttons["startPause"]; reveal(start, in: app); start.tap()
         let finish = app.buttons["finishPause"]; reveal(finish, in: app); finish.tap()
         let skip = app.buttons["skipWinFeedback"]; reveal(skip, in: app); skip.tap()
-        app.tabBars.buttons["Fremskridt"].tap()
+        tab("Fremskridt", in: app).tap()
         let yesterday = app.buttons[dayID(offset: -1)]; reveal(yesterday, in: app); yesterday.tap()
         let confirm = app.buttons["confirmDay"]; reveal(confirm, in: app); confirm.tap()
         XCTAssertFalse(app.buttons["confirmDay"].exists)
@@ -146,7 +153,7 @@ final class FRIUITests: XCTestCase {
     @MainActor func testPlanEditingPersistsAcrossLaunch() {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-reset-state", "-demo"]
-        app.launch(); app.tabBars.buttons["Min plan"].tap(); app.buttons["editPlan"].tap()
+        app.launch(); tab("Min plan", in: app).tap(); app.buttons["editPlan"].tap()
         app.buttons["Flere penge"].tap()
         let field = app.textFields["copingAction"]; reveal(field, in: app)
         field.tap()
@@ -156,7 +163,7 @@ final class FRIUITests: XCTestCase {
         let save = app.buttons["savePlan"]; reveal(save, in: app); save.tap()
         XCTAssertTrue(app.buttons["editPlan"].waitForExistence(timeout: 5))
         app.terminate(); app.launchArguments = ["-ui-testing"]; app.launch()
-        app.tabBars.buttons["Min plan"].tap()
+        tab("Min plan", in: app).tap()
         XCTAssertTrue(app.staticTexts["Flere penge."].exists)
         XCTAssertTrue(app.staticTexts[edited].exists)
     }
@@ -165,7 +172,7 @@ final class FRIUITests: XCTestCase {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-reset-state", "-demo"]
         app.launch()
-        app.tabBars.buttons["Min plan"].tap()
+        tab("Min plan", in: app).tap()
         app.buttons["editPlan"].tap()
         let action = app.textFields["copingAction"]
         reveal(action, in: app)
@@ -182,7 +189,7 @@ final class FRIUITests: XCTestCase {
         app.terminate()
         app.launchArguments = ["-ui-testing"]
         app.launch()
-        app.tabBars.buttons["Min plan"].tap()
+        tab("Min plan", in: app).tap()
         app.buttons["editPlan"].tap()
         app.buttons["Flere penge"].tap()
         reveal(action, in: app)
@@ -196,7 +203,7 @@ final class FRIUITests: XCTestCase {
     @MainActor func testLocalBackupRestoresAndDismissesStaleEditors() {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-reset-state", "-demo"]
-        app.launch(); app.tabBars.buttons["Fremskridt"].tap()
+        app.launch(); tab("Fremskridt", in: app).tap()
         let yesterday = app.buttons[dayID(offset: -1)]; reveal(yesterday, in: app); yesterday.tap()
         app.buttons["confirmDay"].tap()
         app.buttons["settings"].tap()
@@ -206,7 +213,7 @@ final class FRIUITests: XCTestCase {
         app.buttons["Gendan denne plan"].tap()
         XCTAssertTrue(app.buttons["savingsCounter"].waitForExistence(timeout: 5))
         XCTAssertFalse(app.buttons["saveSettings"].exists)
-        app.tabBars.buttons["Fremskridt"].tap(); reveal(yesterday, in: app)
+        tab("Fremskridt", in: app).tap(); reveal(yesterday, in: app)
         XCTAssertTrue(yesterday.label.contains("Ikke bekræftet"))
     }
 
@@ -241,12 +248,14 @@ final class FRIUITests: XCTestCase {
         XCTAssertTrue(app.buttons["onboardingNext"].waitForExistence(timeout: 10))
         app.buttons["onboardingNext"].tap()
         app.buttons["onboardingNext"].tap()
-        let tin = app.textFields["tinPouches"]
-        XCTAssertTrue(tin.waitForExistence(timeout: 5))
-        tin.tap()
-        tin.typeText(String(repeating: XCUIKeyboardKey.delete.rawValue, count: 2) + "0")
-        XCTAssertFalse(app.buttons["onboardingNext"].isEnabled)
-        tin.typeText(XCUIKeyboardKey.delete.rawValue + "20")
+        // Native controls: no keyboard, sensible defaults, and a preset typical tin price.
+        XCTAssertTrue(app.staticTexts["tinPouches"].waitForExistence(timeout: 5))
+        XCTAssertEqual(app.staticTexts["tinPouches"].label, "20")
+        XCTAssertEqual(app.staticTexts["tinPrice"].label, "70")
+        XCTAssertFalse(app.keyboards.firstMatch.exists)
+        app.buttons["tinPouches-plus"].tap(); XCTAssertEqual(app.staticTexts["tinPouches"].label, "21")
+        app.buttons["tinPouches-minus"].tap(); XCTAssertEqual(app.staticTexts["tinPouches"].label, "20")
+        XCTAssertTrue(app.buttons["onboardingNext"].isEnabled)
         app.buttons["onboardingNext"].tap()
         app.buttons["onboardingNext"].tap()
         app.buttons["onboardingNext"].tap()
@@ -280,12 +289,12 @@ final class FRIUITests: XCTestCase {
         XCTAssertTrue(app.buttons["recommit"].waitForExistence(timeout: 5)); app.buttons["recommit"].tap()
         XCTAssertTrue(app.buttons["savingsCounter"].waitForExistence(timeout: 5))
         XCTAssertTrue(app.buttons["savingsCounter"].label.contains("372,"))
-        app.tabBars.buttons["Fremskridt"].tap()
+        tab("Fremskridt", in: app).tap()
         let undo = app.buttons["Fortryd"]
         for _ in 0..<8 where !undo.isHittable { app.swipeUp() }
         XCTAssertTrue(undo.exists)
         undo.tap()
-        app.tabBars.buttons["I dag"].tap()
+        tab("I dag", in: app).tap()
         XCTAssertTrue(app.buttons["savingsCounter"].label.contains("375"))
         app.buttons["cravingHelp"].tap()
         let start = app.buttons["startPause"]
@@ -300,14 +309,14 @@ final class FRIUITests: XCTestCase {
     @MainActor func testPersonalSituationAndSuccessfulPauseFeedbackPersist() {
         let app = XCUIApplication()
         app.launchArguments = ["-ui-testing", "-reset-state", "-demo"]; app.launch()
-        app.tabBars.buttons["Min plan"].tap(); app.buttons["editPlan"].tap()
+        tab("Min plan", in: app).tap(); app.buttons["editPlan"].tap()
         let coffee = app.textFields["action-Til kaffen"]; reveal(coffee, in: app)
         coffee.tap(); coffee.typeText("Tag tyggegummi frem.")
         let save = app.buttons["savePlan"]; reveal(save, in: app); save.tap()
         // Wait for the editor sheet (and keyboard) to finish dismissing before using the tab bar.
-        let tabReady = XCTNSPredicateExpectation(predicate: NSPredicate(format: "hittable == true"), object: app.tabBars.buttons["I dag"])
+        let tabReady = XCTNSPredicateExpectation(predicate: NSPredicate(format: "hittable == true"), object: tab("I dag", in: app))
         XCTAssertEqual(XCTWaiter().wait(for: [tabReady], timeout: 5), .completed)
-        app.tabBars.buttons["I dag"].tap(); app.buttons["cravingHelp"].tap()
+        tab("I dag", in: app).tap(); app.buttons["cravingHelp"].tap()
         app.buttons["cravingSituation"].tap(); app.buttons["Til kaffen"].tap()
         XCTAssertEqual(app.staticTexts["activeCopingAction"].label, "Tag tyggegummi frem.")
         app.buttons["startPause"].tap()
@@ -317,7 +326,7 @@ final class FRIUITests: XCTestCase {
         app.buttons["finishPause"].tap()
         app.buttons["Min valgte handling hjalp"].tap()
         app.buttons["saveWinFeedback"].tap()
-        app.tabBars.buttons["Fremskridt"].tap()
+        tab("Fremskridt", in: app).tap()
         let history = app.buttons["openJournal"]; reveal(history, in: app); history.tap()
         XCTAssertTrue(app.staticTexts["Til kaffen · Tag tyggegummi frem."].exists)
         XCTAssertEqual(app.staticTexts.matching(identifier: "Du kom videre fra trangen").count, 1)
@@ -326,7 +335,7 @@ final class FRIUITests: XCTestCase {
         let action = app.textFields["winAction"]; action.tap(); action.typeText(" Det virkede for mig.")
         app.buttons["saveWinFeedback"].tap()
         app.terminate(); app.launchArguments = ["-ui-testing"]; app.launch()
-        app.tabBars.buttons["Fremskridt"].tap(); reveal(history, in: app); history.tap()
+        tab("Fremskridt", in: app).tap(); reveal(history, in: app); history.tap()
         XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label CONTAINS 'Det virkede for mig.'")).firstMatch.exists)
         XCTAssertEqual(app.staticTexts.matching(identifier: "Du kom videre fra trangen").count, 1)
     }
@@ -337,7 +346,7 @@ final class FRIUITests: XCTestCase {
         app.buttons["logLapse"].tap()
         let confirm = app.buttons["confirmLapse"]; reveal(confirm, in: app); confirm.tap()
         let recommit = app.buttons["recommit"]; XCTAssertTrue(recommit.waitForExistence(timeout: 5)); reveal(recommit, in: app); recommit.tap()
-        app.tabBars.buttons["Fremskridt"].tap()
+        tab("Fremskridt", in: app).tap()
         let history = app.buttons["openJournal"]; reveal(history, in: app); history.tap()
         let edit = app.buttons.matching(NSPredicate(format: "identifier BEGINSWITH 'editLapse-'")).firstMatch
         edit.tap()

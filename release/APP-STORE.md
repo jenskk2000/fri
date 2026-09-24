@@ -31,7 +31,9 @@ Lav en personlig plan ud fra din hverdag, dit forbrug og din grund til at stoppe
 • Personlig onboarding og en plan, du kan rette undervejs.
 • Sparebeløb i kroner beregnet ud fra dine egne forbrugstal.
 • En diskret widget til låseskærmen.
-• En kort pause, når du har lyst til en pose.
+• Se tiden siden din sidste pose – og hvor langt du er i de vigtige første 14 dage.
+• Hjælp ved trang på 5 minutter: stop op, bevæg dig, og lad trangen falde.
+• Et venligt restart efter en pose, med en ny plan til netop den situation.
 • Bekræft hele dage uden poser, og bevar overblikket over ukendte dage.
 • Egne handlinger til svære situationer og valgfri noter om det, der hjalp.
 • Milepæle, der husker din indsats – også efter en svær dag.
@@ -50,10 +52,10 @@ Mere plads til dig. Lav din plan, følg dine sparede kroner og tag næste skridt
 
 FRI is a Danish offline habit-support app for adults wishing to stop snus/nicotine pouches. No login, purchases, external server or special reviewer account is required.
 
-1. Complete onboarding. Default sample consumption is editable: 10 pouches/day, 20/tin, DKK 50/tin = DKK 25/day.
+1. Complete onboarding. Default consumption is editable with steppers/slider: 10 pouches/day, 20/tin, preset typical price DKK 70/tin = DKK 35/day.
 2. Choose “Jeg er allerede stoppet” and a past date to see accrued estimates, or start now.
-3. “Jeg har lyst lige nu” opens optional two-minute support. Closing/reopening preserves an active timer. The completion action records the user's confirmation, not a medical outcome.
-4. “Jeg tog en pose” records usage with a chosen date, adjusts the estimate and updates the current streak. A record can be undone under Fremskridt.
+3. “Jeg har lyst lige nu” opens a 5-minute Stop → Move → Surf flow. Closing/reopening preserves an active timer. The completion action records the user's confirmation, not a medical outcome.
+4. “Jeg tog en pose” records usage with a chosen date and trigger, adjusts the estimate and restarts the current streak, then offers an optional if-then plan for that trigger. A record can be undone under Fremskridt.
 5. Min plan has motivation, editable situation-specific actions, the stop date, and an optional local reminder. Permission is requested only after opting in.
 6. Fremskridt separates time since the last recorded pouch from explicitly confirmed completed days. The calendar uses Danish time. History supports pouch/feedback corrections and retains older check-ins; milestones are secondary.
 7. Settings provides backup export/import and confirmed data deletion.
