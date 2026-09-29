@@ -1,6 +1,6 @@
 # FRI — free first release
 
-Status: the binary is App Store ready. `release/preflight.sh` checks configuration, assets and an unsigned Release archive. What remains needs the owner's Apple account and identity (see *Owner-dependent steps*). Nothing has been uploaded or submitted.
+Status: pre-release. Core tests and an unsigned Release archive passed on 28 September 2026. Public privacy/support details, in-app technical support contact, distribution signing, physical-device checks, and TestFlight validation remain outstanding. `release/preflight.sh` checks configuration, assets and an unsigned Release archive; it currently fails on unfilled public-page placeholders. This repository does not establish a completed upload or submission.
 
 ## Readiness tooling
 

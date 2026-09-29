@@ -1,84 +1,135 @@
-# FRI
+<p align="center">
+  <img src="ios/App/Assets.xcassets/AppIcon.appiconset/icon.png" width="96" alt="FRI app icon">
+</p>
 
-A free, Danish, offline SwiftUI app for quitting snus and nicotine pouches. iOS 26+, iPhone. Light and dark editorial themes with waterfront photography, green accents and bold typography. No account, backend, analytics, advertising, paywall or third-party dependencies.
+<h1 align="center">FRI — Stop med snus</h1>
 
-## Run
+<p align="center"><strong>Mere plads til dig. Én dag ad gangen.</strong></p>
+<p align="center">A free, offline iPhone app for quitting snus and nicotine pouches.<br>Built in SwiftUI. Written for Danish everyday life.</p>
+<p align="center"><strong>iOS 26+</strong> · <strong>SwiftUI + WidgetKit</strong> · <strong>No account</strong> · <strong>No ads or analytics</strong></p>
 
-Open `ios/FRI.xcodeproj`, select **FRI**, choose an iPhone simulator and Run.
+<p align="center">
+  <a href="#the-app">Features</a> ·
+  <a href="#run-locally">Run locally</a> ·
+  <a href="#privacy-and-data">Privacy</a> ·
+  <a href="#project-status">Project status</a>
+</p>
 
-The checked-in project is generated from `ios/project.yml`. After adding source files or changing target settings:
+## A little more freedom
+
+FRI means “free” in Danish. The app brings together a personal quit plan, a clear view of progress, and something practical to do when a craving arrives. No signup, subscription, or feed to keep up with.
+
+<table>
+  <tr>
+    <td align="center"><img src="release/screenshots/6.9/01-home.png" width="250" alt="Light home screen showing 15 days since the last recorded pouch and estimated savings"><br><strong>Today</strong></td>
+    <td align="center"><img src="release/screenshots/6.9/03-craving-move.png" width="250" alt="Five-minute craving support with a timer and movement suggestions"><br><strong>Help right now</strong></td>
+    <td align="center"><img src="release/screenshots/6.9/06-home-dark.png" width="250" alt="FRI home screen in dark mode with mint accents"><br><strong>After dark</strong></td>
+  </tr>
+</table>
+
+*Actual simulator screenshots using isolated demo data. The interface is in Danish.*
+
+## The app
+
+### Progress you can understand
+
+Follow the time since your last recorded pouch, estimated savings in Danish kroner, and milestones along the way. The 14-day calendar distinguishes explicitly confirmed pouch-free days, recorded use, and days you have not checked in. Missing information stays unknown.
+
+Made a mistake? Correct or undo a record. Historical prices and previous milestones are preserved.
+
+### A plan that fits your life
+
+Set your usual consumption, tin price, quit date, motivation, and difficult situations. Give each situation a specific action to try. Onboarding saves your draft, and your plan stays editable. Local reminders are optional and off until requested.
+
+### Support when a craving arrives
+
+One tap opens a five-minute **Stop → Move → Surf** flow. The timer keeps track of elapsed time even when you close the app. Record what helped, or return to your plan after a pouch without losing your history.
+
+<table>
+  <tr>
+    <td align="center"><img src="release/screenshots/6.9/04-progress.png" width="250" alt="Progress screen separating estimated savings from confirmed and unknown days"><br><strong>Your progress</strong></td>
+    <td align="center"><img src="release/screenshots/6.9/05-plan.png" width="250" alt="Personal quit plan with motivation and actions for difficult situations"><br><strong>Your plan</strong></td>
+    <td align="center"><img src="release/screenshots/6.9/07-recommit.png" width="250" alt="Supportive flow for recommitting to a plan after recording a pouch"><br><strong>Your next step</strong></td>
+  </tr>
+</table>
+
+Also included: Lock Screen widgets with a discreet mode, light/dark/system appearance, backup export and import, local recovery, and data deletion.
+
+## Run locally
+
+You need a Mac with **Xcode 26 or newer** and an **iOS 26+ iPhone simulator**. The app targets iPhone only and has no third-party runtime dependencies.
+
+```sh
+git clone https://github.com/jenskk2000/fri.git
+cd fri
+open ios/FRI.xcodeproj
+```
+
+In Xcode, select the **FRI** scheme, choose an iPhone simulator, and run. A fresh installation starts onboarding.
+
+For a physical iPhone, select your own Apple Developer team and configure app, widget, and shared App Group identifiers. Update both `ios/project.yml` and `JourneyArchive.group` when changing the App Group. See the [device and distribution setup](release/APP-STORE.md).
+
+The Xcode project is checked in. You only need [XcodeGen](https://github.com/yonaskolb/XcodeGen) when adding source files or changing project settings:
 
 ```sh
 xcodegen generate --spec ios/project.yml
-swift test
 ```
 
-Run the **FRI** scheme's UI tests in Xcode. Tests use separate journey, onboarding-draft and appearance storage. Reminder testing temporarily schedules then removes a local notification in the simulator.
+### Tests and release checks
 
-For physical devices, use your Apple team and owned app/extension/App Group identifiers. Follow [release/APP-STORE.md](release/APP-STORE.md). Before each upload run `release/preflight.sh` (blocker checks plus an unsigned Release archive); `release/screenshots.sh` regenerates the 6.9" App Store screenshots from demo data, and `site/` holds the public privacy/support pages. The app has not been uploaded or submitted to the App Store.
+```sh
+# Domain tests: calculations, dates, history, migration, and recovery
+swift test
 
-## Three core features
+# Configuration/assets checks and an unsigned Release archive
+sh release/preflight.sh
 
-1. **Trustworthy progress.** Live DKK estimates, calendar-based years/months/days since the last recorded pouch, exact start date, a 14-day history of explicitly confirmed completed days, recorded use and unknown days. Correct pouch count/time/situation or undo mistakes. Lock Screen widgets are another surface of this overview.
-2. **Your personal plan.** Brief, resumable onboarding with an editable first action. Motivation changes the Home heading. Each selected situation can have a specific action, with the original general action as a fallback. Optional reminders remain off until requested.
-3. **Help right now.** One tap from Home, an optional situation picker and a five-minute Stop → Move → Surf timer that survives closure. A persisted session ID prevents duplicate wins. Optional feedback records what helped and can be edited in History.
+# Regenerate App Store screenshots from isolated demo data
+sh release/screenshots.sh
+```
 
-Daily reflection cards and the weekly energy chart are removed from the main screens. Existing check-ins remain readable/editable in History; retained milestones are a secondary link. No new reflection prompts, missions or content library.
+Run the **FRI** scheme's UI tests in Xcode with **Product → Test**. Automated UI tests use separate storage; preserve the normal simulator archive because it may contain manual edits.
 
-Settings retain historical consumption editing, savings goals, discreet widgets, local backup/import/recovery, deletion and privacy/help. Data remains offline with no account or paywall. Appearance lives under **Indstillinger → Udseende**: Lys, Mørk, or System. Light is the default; the choice saves immediately on this device, independently of the quit plan. System follows live iOS appearance changes. The light theme uses warm paper, dark green typography, white cards and softened waterfront photography; Dark retains the original mint design.
+The release preflight intentionally fails while the public support/privacy pages contain placeholders. Passing an unsigned build does not verify distribution signing or real-device behavior.
 
-See [the research-based plan](docs/FOCUSED-CORE-PLAN.md) and [verification](verification/focused-core/VERIFIED.md).
+## Privacy and data
 
-### What a day means
+FRI has no backend, account system, analytics, advertising, or third-party SDKs. The app and widget share an on-device JSON archive with atomic writes and a previous-version recovery copy. Data leaves that archive only through user-controlled actions or system facilities, such as exporting a backup or iPhone backups.
 
-The confirmation calendar uses **Europe/Copenhagen** consistently, including when travelling. A full day after the stop date can be explicitly confirmed only after its local midnight end. An unfinished day and the partial first day cannot be counted as complete. Missing entries stay unknown; recorded pouches override any conflicting confirmation. Undoing a mistaken pouch restores the prior confirmation. Editing the stop date can make an earlier confirmation ineligible without deleting it.
+Notifications are local and opt-in. Exported backups contain personal history and notes; do not attach them to public GitHub issues.
 
-Time since the last recorded pouch is a separate counter, based on entries; it is not verified abstinence. Day confirmations do not change the financial estimate. Savings integrate real elapsed seconds, while the long-duration label uses calendar years/months/days.
+Savings are a **consumption estimate**, based on the price and quantity you enter. They are not a bank balance and exclude whole-tin purchases and nicotine replacement expenses. Time since a recorded pouch is not verified abstinence. FRI offers habit support, not individual medical advice.
 
-## Calculation contract
+## Project status
 
-`daily cost = tin price / pouches per tin × pouches per day`
+**Pre-release.** This repository contains the app, widgets, tests, screenshot set, and release documentation. It does not currently provide an App Store download.
 
-Historical consumption segments integrate over actual elapsed seconds; 86,400 seconds equals a day. Recorded pouches are subtracted at their captured historical unit prices. Fractional prices are retained until display. Negative raw balances carry forward while the visible total is floored at zero.
+On **28 September 2026**, all **56 core tests passed** and an **unsigned Release archive built successfully**. Those checks do not certify the UI, accessibility, signing, or TestFlight readiness.
 
-Example: 50 kr. / 20 pouches × 10 pouches/day = 25 kr./day; 15 days = 375 kr. One pouch deducts 2.50 kr. and restarts the current streak. Past milestones use the longest completed streak and remain after a subsequent setback. Backdated records can correct that history.
+Remaining release work includes public privacy/support details, an in-app technical support contact, signed-device validation, the [real-iPhone checklist](release/DEVICE-CHECK.md), and a TestFlight beta. See the [release guide](release/APP-STORE.md) for the submission workflow.
 
-Editing consumption applies from now, preserving earlier segments. Correcting the original stop date is deliberately different: the app previews and confirms a recalculation from the corrected date while preserving later price segments and valid events.
+## Inside the repository
 
-The value is a **consumption estimate**, not a bank balance. Whole-tin purchases, offers and nicotine replacement expenses are excluded and explained in the app. The app does not measure nicotine from other products.
+| Path | Contents |
+| --- | --- |
+| [`ios/App`](ios/App) | SwiftUI screens, onboarding, settings, and local state |
+| [`ios/Shared`](ios/Shared) | Foundation domain models, calculations, and archive storage |
+| [`ios/Widgets`](ios/Widgets) | WidgetKit extension |
+| [`Tests/FRICoreTests`](Tests/FRICoreTests) | Swift Package domain tests |
+| [`ios/UITests`](ios/UITests) | UI journeys and screenshot capture |
+| [`release`](release) | Release checks, screenshots, and App Store material |
+| [`site`](site) | Static privacy and support page drafts |
+| [`docs`](docs) | Product scope, design decisions, and technical notes |
+| [`verification`](verification) | Dated verification reports and captures, including earlier designs |
 
-Widgets prepare 24 hours of 15-minute entries; iOS controls update timing. In-app counters are more current between widget updates.
+For calculation rules, time zones, storage migration, debug arguments, and asset provenance, see [Technical notes](docs/TECHNICAL-NOTES.md). The [focused product plan](docs/FOCUSED-CORE-PLAN.md) explains the three-feature scope.
 
-## Data and migration
+## Feedback
 
-`JourneyArchive` stores JSON in `group.dk.fri.shared`, using atomic writes and iOS protection after first unlock. Optional new fields preserve the original v1 MVP format. Imports reject unsupported versions, invalid values/dates, duplicate IDs, inconsistent baselines and oversized files before replacing data.
+Bug reports and focused suggestions are welcome through [GitHub Issues](https://github.com/jenskk2000/fri/issues). Include your iOS version, steps to reproduce, and what you expected. Use demo data for screenshots and omit private notes or backups.
 
-General coping actions support 500 characters throughout onboarding, import and editing; situation-specific actions support 250. Older v1 plans with empty required plan fields receive usable defaults on load, preserving their history. Nonempty valid actions are not truncated.
+## Credits and licensing
 
-Every save retains the previous valid version as `.previous`. Explicit restore preserves unreadable primary bytes as `.unreadable`. Neither is transmitted. User-exported files and system backups remain under the user's control. Import replaces rather than merges and resets open editors to prevent stale settings from overwriting restored data.
+Built with SwiftUI and WidgetKit. Bundled typefaces are **Inter** and **Montserrat**, with their [SIL Open Font Licenses](ios/App/Fonts) included. The waterfront artwork and app icon were generated with ImageGen; see the [asset notes](design/dark-editorial/ASSET-PROMPTS.md).
 
-Daily check-ins store a local date key, stable if the phone changes time zone. Reminders follow the phone's local time. Self-reports are not interpreted as medical results.
-
-## Structure
-
-- `ios/Shared`: Foundation domain, reflections, milestones and archive; shared with widget and SwiftPM tests.
-- `ios/App`: native SwiftUI views, observable store, onboarding draft and file backup workflow.
-- `ios/Widgets`: WidgetKit provider and four families.
-- `Tests/FRICoreTests`: savings, time, history, migration, invalid import and recovery tests.
-- `ios/UITests`: simulator journeys, interruption, settings, notifications, large type and restoration.
-- `verification`: actual runtime screenshots and dated verification reports.
-- `release`: Danish listing, privacy/support drafts, reviewer notes and owner-dependent distribution steps.
-
-Debug-only arguments: `-ui-testing` selects an isolated archive; `-reset-state` clears only the test archive, draft and appearance; `-demo` seeds an empty selected archive with 15 illustrative days; `-fast-timer` uses two seconds for timer tests. Release builds compile these out. Never use `-demo` on a real user's archive.
-
-The normal development simulator archive may contain user edits and must be preserved. Automated tests use isolated data. A fresh installation starts onboarding.
-
-## Design and references
-
-Selected direction: the dark home concept in `design/elias-bonde/01-dark-home.png`. ImageGen produced the bundled waterfront photograph and mint app icon. Montserrat and Inter are bundled with their SIL Open Font Licenses. All text and controls remain native SwiftUI. The original paper assets remain archived for reference.
-
-See [design/dark-editorial/IMPLEMENTATION.md](design/dark-editorial/IMPLEMENTATION.md) for the visual system and asset provenance, and [verification/dark-editorial/VERIFIED.md](verification/dark-editorial/VERIFIED.md) for redesign verification.
-Support: [Stoplinien](https://www.stoplinien.dk/om-os/tilbud).
-Technical references: [Apple file import](https://developer.apple.com/documentation/swiftui/view/fileimporter(ispresented:allowedcontenttypes:oncompletion:)), [Observation](https://developer.apple.com/documentation/swiftui/managing-model-data-in-your-app), [WidgetKit timelines](https://developer.apple.com/documentation/widgetkit/timelineprovider).
-
-See [verification/reliability-pass/VERIFIED.md](verification/reliability-pass/VERIFIED.md) for the latest reliability checks and measurements, and [verification/focused-core/VERIFIED.md](verification/focused-core/VERIFIED.md) for the preceding product verification. [verification/FULL-APP.md](verification/FULL-APP.md) records the earlier broader version and distribution gates. The older `VERIFIED.md` documents the initial MVP only.
+No open-source license has been granted for the app code or artwork. Public availability of this repository does not change their copyright status. Bundled fonts retain their own licenses.
